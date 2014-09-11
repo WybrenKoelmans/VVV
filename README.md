@@ -1,3 +1,9 @@
+##### This repository is modified by SkyDreams. Follow all [steps](#the-first-vagrant-up) below.
+##### The last 2 steps are added for our wordpress-skydreams setup
+***
+
+### To update
+
 # Varying Vagrant Vagrants
 
 Varying Vagrant Vagrants is an evolving [Vagrant](http://vagrantup.com) configuration focused on [WordPress](http://wordpress.org) development.
@@ -68,11 +74,19 @@ Entirely different server configurations can be created by modifying the files i
     * Be patient as the magic happens. This could take a while on the first run as your local machine downloads the required files.
     * Watch as the script ends, as an administrator or `su` ***password may be required*** to properly modify the hosts file on your local machine.
 1. Visit any of the following default sites in your browser:
+    * [http://wordpress.skydreams.com.dev/](http://wordpress.skydreams.com.dev/) for WordPress stable with preinstalled plugins (same as used in the live wordpress environment)
     * [http://local.wordpress.dev/](http://local.wordpress.dev/) for WordPress stable
     * [http://local.wordpress-trunk.dev/](http://local.wordpress-trunk.dev/) for WordPress trunk
     * [http://src.wordpress-develop.dev/](http://src.wordpress-develop.dev/) for trunk WordPress development files
     * [http://build.wordpress-develop.dev/](http://build.wordpress-develop.dev/) for the version of those development files built with Grunt
     * [http://vvv.dev/](http://vvv.dev/) for a default dashboard containing several useful tools
+1. Add the SkyDreams weetjes theme to the new WordPress installation:
+    * You can find our theme in the [https://github.com/SkyDreams/wordpress-theme-weetjes](https://github.com/SkyDreams/wordpress-theme-weetjes) repository
+    * Clone or copy paste this theme to `vagrant-local/www/wordpress-skydreams/htdocs/wp-content/themes/weetjes`
+1. Update the database with content from the live environment:
+    * Copy the latest wordpress database dump from `\\nas\it\Dev-DBs\` and put this file in the root of this repository
+    * Run the update-db.sh script located in `vagrant-local/scripts/`
+    * It will import the database and replace all the URLs to our dev domain
 
 Fancy, yeah?
 
