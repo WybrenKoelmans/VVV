@@ -13,3 +13,9 @@ cd /vagrant/www/wordpress-skydreams/htdocs/
 echo "Add skydev user"
 wp user create skydev test@skydreams.com --user_pass=skydev --role=administrator
 wp super-admin add test@skydreams.com
+
+for url in $(wp site list --field=url)
+do
+	wp option update disqus_forum_url skydreams-test --url=$url
+	wp user set-role skydev administrator --url=$url
+done
