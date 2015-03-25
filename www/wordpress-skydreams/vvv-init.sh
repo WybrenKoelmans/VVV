@@ -3,6 +3,27 @@ echo "Creating database 'wordpress-skydreams' (if it does not exist)..."
 mysql -u root --password=root -e "CREATE DATABASE IF NOT EXISTS \`wordpress-skydreams\`"
 mysql -u root --password=root -e "GRANT ALL PRIVILEGES ON \`wordpress-skydreams\`.* TO skydev@localhost IDENTIFIED BY 'skydev';"
 
+plugins=(
+    advanced-code-editor
+    advanced-custom-fields
+    akismet
+    better-wordpress-showhide-elements
+    disqus-comment-system
+    envira-gallery
+    orbisius-child-theme-creator
+    raw-html
+    shareaholic
+    tablepress
+    tinymce-advanced
+    wordpress-faq-manager
+    wordpress-importer
+    wordpress-mu-domain-mapping
+    wordpress-seo
+    wp-mail-smtp
+    wp-native-dashboard
+    redirection
+)
+
 if [ ! -d "htdocs" ]; then
 	echo 'Installing WordPress (release version) in wordpress-skydreams/htdocs...'
 	mkdir ./htdocs
@@ -12,25 +33,6 @@ cd ./htdocs
 	wp core multisite-install --url=wordpress.skydreams.com.dev --title="wordpress-skydreams" --admin_user=skydev --admin_password=skydev --admin_email=test@skydreams.com --allow-root
 
 	echo 'Install required plugins'
-
-    plugins=(
-        advanced-code-editor
-        advanced-custom-fields
-        akismet
-        better-wordpress-showhide-elements
-        disqus-comment-system
-        envira-gallery
-        orbisius-child-theme-creator
-        raw-html
-        shareaholic
-        tablepress
-        tinymce-advanced
-        wordpress-faq-manager
-        wordpress-importer
-        wordpress-mu-domain-mapping
-        wordpress-seo
-        wp-mail-smtp
-    )
 
     for plugin in "${plugins[@]}"
     do
@@ -58,6 +60,15 @@ else
 	wp core update --allow-root
 	wp core update-db --allow-root
 
+	echo 'Install required plugins'
+
+	for plugin in "${plugins[@]}"
+	do
+	if ! wp plugin is-installed $plugin; then
+		wp plugin install $plugin --activate-network
+	fi
+	done
+	
 	echo 'Updating Plugins'
-    wp plugin update --all
+	wp plugin update --all
 fi
