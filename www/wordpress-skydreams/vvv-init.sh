@@ -43,13 +43,16 @@ cd ./htdocs
     cp wp-content/plugins/wordpress-mu-domain-mapping/sunrise.php wp-content/sunrise.php
 
     sed -i "/define('BLOG_ID_CURRENT_SITE', 1);/ a\
-    DEFINE( 'SUNRISE', true );\
+	define('SUNRISE', true);\
+	define('PARTNER_URL', 'http://partners.skydreams.com.dev');
+	define('SKYAPI_URL', 'http://skyapi.net.dev');
     " wp-config.php
 
 	echo 'Add skydev user'
 	wp user create skydev test@skydreams.com --user_pass=skydev --role=administrator
+	wp super-admin add test@skydreams.com
 
-		cd -
+	cd -
 else
 	echo 'Updating WordPress in wordpress-skydreams/htdocs...'
 	wp core update --allow-root
