@@ -1,15 +1,18 @@
 # Varying Vagrant Vagrants Changelog
 
-## 1.2-working
+## 1.2.0
+* VVV is now [MIT Licensed](https://github.com/Varying-Vagrant-Vagrants/VVV/blob/master/LICENSE).
 * ***Possible Breaking:*** By default, database files are no longer mapped to a local location.
 	* A full `vagrant destroy` and the removal of MySQL data from `{vvv-dir}/database/data/` is recommended.
-	* If database files already exist from an earlier vesion of VVV, data will continue to be mapped locally until removed.
+	* If database files already exist from an earlier version of VVV, data will continue to be mapped locally until removed.
 	* Database data will continue to exist on the virtual machine through `vagrant halt` and `vagrant suspend`.
 	* Database data will no longer exist on the virtual machine after `vagrant destroy`.
 	* A `db_backup` script is provided by default that creates local backups of each database on halt, suspend, and destroy if the vagrant-triggers plugin is installed.
 * ***Possible Breaking:*** Ubuntu has been upgraded from 12.04 LTS to 14.04 LTS. We have also moved from 32bit to 64bit.
 	* A full `vagrant destroy` is recommended for best results.
 	* A new box will be downloaded for the base virtual machine. If you'd like to free space, remove the old box with `vagrant box remove precise32`. Running `vagrant box list` will show you all base VMs on your local machine.
+	* With a new operating system comes a new RSA key. If you are connecting via SSH through an application that relies on your machines `known_hosts` file, you will need to clear the old key for 192.168.50.4. [See #365](https://github.com/Varying-Vagrant-Vagrants/VVV/issues/365)
+* Init scripts are now fired with `source` rather than `bash`. Due to this change, something like `cd "$(dirname $0)"` no longer works as expected. See [#373](https://github.com/Varying-Vagrant-Vagrants/VVV/issues/373) and [#370](https://github.com/Varying-Vagrant-Vagrants/VVV/issues/370) for reasoning and discussion.
 * WordPress: Add `develop_git` to convert the default SVN checkout to Git.
 * PHP: Update to PHP 5.5.x
 * PHP: Remove php-apc and apc.ini. Enable built in opcache.
@@ -17,13 +20,14 @@
 * PHP: Start tracking custom opcache.ini file.
 * PHP: Update to PHPUnit 4.0.x
 * PHP: Install XDebug PECL extension directly, rather than via apt.
-* phpMyAdmin: Update to 4.1.14
+* phpMyAdmin: Update to 4.2.13.1
 * WP-Cli: Add support for autocomplete.
 * VVV Dashboard: Add [Opcache Status](https://github.com/rlerdorf/opcache-status) for opcache monitoring.
 * Bash: Allow for a custom `bash_prompt` file in `config/`
 * NodeJS: Use recommended PPAs to install
 * NodeJS: Self update NPM during provisioning
 * Logs: Map a shared directory for logs, start storing `php_errors.log`
+* Nginx: Install using the mainline repository, currently 1.7.x.
 
 ## 1.1
 * Transition to [Varying Vagrant Vagrants organization](https://github.com/Varying-Vagrant-Vagrants).
