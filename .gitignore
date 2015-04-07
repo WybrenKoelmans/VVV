@@ -68,3 +68,4 @@
 !/www/wordpress-skydreams/vvv-hosts
 !/www/wordpress-skydreams/vvv-init.sh
 !/www/wordpress-skydreams/wp-cli.yml
+!/www/wordpress-skydreams/vvv-nginx.conf
