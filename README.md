@@ -63,7 +63,32 @@ Entirely different server configurations can be created by modifying the files i
     * ***Note:*** If Vagrant is already installed, use `vagrant -v` to check the version. You may want to consider upgrading if a much older version is in use.
 1. Install the [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater) plugin with `vagrant plugin install vagrant-hostsupdater`
     * Note: This step is not a requirement, though it does make the process of starting up a virtual machine nicer by automating the entries needed in your local machine's `hosts` file to access the provisioned VVV domains in your browser.
-    * If you choose not to install this plugin, a manual entry should be added to your local `hosts` file that looks like this: `192.168.50.4  vvv.dev local.wordpress.dev local.wordpress-trunk.dev src.wordpress-develop.dev build.wordpress-develop.dev`
+    * If you choose not to install this plugin, manual entries should be added to your local `hosts` file that looks like this: 
+    ``` hosts
+    192.168.50.4  vvv.dev  
+    192.168.50.4  local.wordpress.dev  
+    192.168.50.4  local.wordpress-trunk.dev  
+    192.168.50.4  src.wordpress-develop.dev  
+    192.168.50.4  build.wordpress-develop.dev  
+    192.168.50.4  wordpress.skydreams.com.dev  
+    192.168.50.4  alarmsysteem-weetjes.nl.dev  
+    192.168.50.4  cvketel-weetjes.nl.dev  
+    192.168.50.4  dakdekker-weetjes.nl.dev  
+    192.168.50.4  dakkapel-weetjes.nl.dev  
+    192.168.50.4  dubbelglas-weetjes.nl.dev  
+    192.168.50.4  gevelreiniging-weetjes.nl.dev  
+    192.168.50.4  hekwerk-weetjes.nl.dev  
+    192.168.50.4  helpikverhuis.nl.dev  
+    192.168.50.4  hovenier-weetjes.nl.dev  
+    192.168.50.4  isolatie-weetjes.nl.dev  
+    192.168.50.4  kozijnen-weetjes.nl.dev  
+    192.168.50.4  rolluiken-weetjes.nl.dev  
+    192.168.50.4  schilder-weetjes.nl.dev  
+    192.168.50.4  stucadoor-weetjes.nl.dev  
+    192.168.50.4  tegelzetter-weetjes.nl.dev  
+    192.168.50.4  zonnepanelen-weetjes.nl.dev  
+    192.168.50.4  zonwering-weetjes.nl.dev
+    ```
 1. Install the [vagrant-triggers](https://github.com/emyl/vagrant-triggers) plugin with `vagrant plugin install vagrant-triggers`
     * Note: This step is not a requirement. When installed, it allows for various scripts to fire when issuing commands such as `vagrant halt` and `vagrant destroy`.
     * By default, if vagrant-triggers is installed, a `db_backup` script will run on halt, suspend, and destroy that backs up each database to a `dbname.sql` file in the `{vvv}/database/backups/` directory. These will then be imported automatically if starting from scratch. Custom scripts can be added to override this default behavior.
@@ -72,24 +97,23 @@ Entirely different server configurations can be created by modifying the files i
     * `git clone git://github.com/Varying-Vagrant-Vagrants/VVV.git vagrant-local`
     * OR download and extract the repository master [zip file](https://github.com/varying-vagrant-vagrants/vvv/archive/master.zip) to a `vagrant-local` directory on your computer.
     * OR download and extract a [stable release](https://github.com/varying-vagrant-vagrants/vvv/releases) zip file if you'd like some extra comfort.
+1. Move a database copy to the root of this repository:
+    * Copy the latest wordpress database dump from `\\nas\it\Dev-DBs\` and put this file in the root of this repository
 1. In a command prompt, change into the new directory with `cd vagrant-local`
 1. Start the Vagrant environment with `vagrant up`
     * Be patient as the magic happens. This could take a while on the first run as your local machine downloads the required files.
     * Watch as the script ends, as an administrator or `su` ***password may be required*** to properly modify the hosts file on your local machine.
+1. Add the latest SkyDreams weetjes theme to the new WordPress installation:
+	* You can find our theme in the [https://github.com/SkyDreams/wordpress-theme-weetjes](https://github.com/SkyDreams/wordpress-theme-weetjes) repository
+	* Clone or copy paste this theme to `vagrant-local/www/wordpress-skydreams/htdocs/wp-content/themes/weetjes`
 1. Visit any of the following default sites in your browser:
-    * [http://wordpress.skydreams.com.dev/](http://wordpress.skydreams.com.dev/) for WordPress stable with preinstalled plugins (same as used in the live wordpress environment)
+	* [http://vvv.dev/](http://vvv.dev/) for a default dashboard containing several useful tools and a site overview
+    * [http://wordpress.skydreams.com.dev/](http://wordpress.skydreams.com.dev/) for the weetjes network site (admin credentials skydev:skydev)
+    * [http://dakkapel-weetjes.nl.dev/](http://dakkapel-weetjes.nl.dev/) for a mapped weetjes domain (admin credentials skydev:skydev)
     * [http://local.wordpress.dev/](http://local.wordpress.dev/) for WordPress stable
     * [http://local.wordpress-trunk.dev/](http://local.wordpress-trunk.dev/) for WordPress trunk
     * [http://src.wordpress-develop.dev/](http://src.wordpress-develop.dev/) for trunk WordPress development files
     * [http://build.wordpress-develop.dev/](http://build.wordpress-develop.dev/) for the version of those development files built with Grunt
-    * [http://vvv.dev/](http://vvv.dev/) for a default dashboard containing several useful tools
-1. Add the SkyDreams weetjes theme to the new WordPress installation:
-    * You can find our theme in the [https://github.com/SkyDreams/wordpress-theme-weetjes](https://github.com/SkyDreams/wordpress-theme-weetjes) repository
-    * Clone or copy paste this theme to `vagrant-local/www/wordpress-skydreams/htdocs/wp-content/themes/weetjes`
-1. Update the database with content from the live environment:
-    * Copy the latest wordpress database dump from `\\nas\it\Dev-DBs\` and put this file in the root of this repository
-    * Run the update-db.sh script located in `vagrant-local/scripts/`
-    * It will import the database and replace all the URLs to our dev domain
 
 Fancy, yeah?
 
