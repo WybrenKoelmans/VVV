@@ -54,7 +54,16 @@
 
 # And a few of our web directories are important to share.
 !/www/default/
+
 !/www/wordpress-skydreams/
+/www/wordpress-skydreams/htdocs
+
+!/www/wordpress-homedeal/
+/www/wordpress-homedeal/htdocs
+
+!/www/wordpress-homedeal-blog/
+/www/wordpress-homedeal-blog/htdocs
+
 !/www/dashboard/
 
 /www/default/*
@@ -64,4 +73,4 @@
 !/www/default/dashboard-custom.php
 !/www/default/style.css
 
-/www/wordpress-skydreams/htdocs
+
