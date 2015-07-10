@@ -1,5 +1,4 @@
 ##### This repository is modified by SkyDreams. Follow all [steps](#the-first-vagrant-up) below.
-##### The last 2 steps are added for our wordpress-skydreams setup
 ***
 
 ### To update
@@ -88,6 +87,7 @@ Entirely different server configurations can be created by modifying the files i
     192.168.50.4  tegelzetter-weetjes.nl.dev  
     192.168.50.4  zonnepanelen-weetjes.nl.dev  
     192.168.50.4  zonwering-weetjes.nl.dev
+    192.168.50.4  homedeal.nl.dev
     ```
 1. Install the [vagrant-triggers](https://github.com/emyl/vagrant-triggers) plugin with `vagrant plugin install vagrant-triggers`
     * Note: This step is not a requirement. When installed, it allows for various scripts to fire when issuing commands such as `vagrant halt` and `vagrant destroy`.
@@ -97,8 +97,9 @@ Entirely different server configurations can be created by modifying the files i
     * `git clone git://github.com/Varying-Vagrant-Vagrants/VVV.git vagrant-local`
     * OR download and extract the repository master [zip file](https://github.com/varying-vagrant-vagrants/vvv/archive/master.zip) to a `vagrant-local` directory on your computer.
     * OR download and extract a [stable release](https://github.com/varying-vagrant-vagrants/vvv/releases) zip file if you'd like some extra comfort.
-1. Move a database copy to the root of this repository:
-    * Copy the latest wordpress database dump from `\\nas\it\Dev-DBs\` and put this file in the root of this repository
+1. Move a database copies to the root of this repository:
+    * Copy the latest Weetjes database dump from `\\nas\it\Dev-DBs\` and put this file in the root of this repository
+    * Copy the latest HomeDeal database dump from `\\nas\it\Dev-DBs\` and put this file in the root of this repository
 1. In a command prompt, change into the new directory with `cd vagrant-local`
 1. Start the Vagrant environment with `vagrant up`
     * Be patient as the magic happens. This could take a while on the first run as your local machine downloads the required files.
@@ -106,14 +107,15 @@ Entirely different server configurations can be created by modifying the files i
 1. Add the latest SkyDreams weetjes theme to the new WordPress installation:
 	* You can find our theme in the [https://github.com/SkyDreams/wordpress-theme-weetjes](https://github.com/SkyDreams/wordpress-theme-weetjes) repository
 	* Clone or copy paste this theme to `vagrant-local/www/wordpress-skydreams/htdocs/wp-content/themes/weetjes`
-1. Visit any of the following default sites in your browser:
+1. Add the latest SkyDreams HomeDeal theme to the new WordPress installation:
+	* You can find our theme in the [https://github.com/SkyDreams/wordpress-theme-homedeal](https://github.com/SkyDreams/wordpress-theme-homedeal) repository
+	* Clone or copy paste this theme to `vagrant-local/www/wordpress-homedeal/htdocs/wp-content/themes/homedeal`
+1. Visit any of the following default sites in your browser (admin credentials skydev:skydev):
 	* [http://vvv.dev/](http://vvv.dev/) for a default dashboard containing several useful tools and a site overview
-    * [http://wordpress.skydreams.com.dev/](http://wordpress.skydreams.com.dev/) for the weetjes network site (admin credentials skydev:skydev)
-    * [http://dakkapel-weetjes.nl.dev/](http://dakkapel-weetjes.nl.dev/) for a mapped weetjes domain (admin credentials skydev:skydev)
-    * [http://local.wordpress.dev/](http://local.wordpress.dev/) for WordPress stable
-    * [http://local.wordpress-trunk.dev/](http://local.wordpress-trunk.dev/) for WordPress trunk
-    * [http://src.wordpress-develop.dev/](http://src.wordpress-develop.dev/) for trunk WordPress development files
-    * [http://build.wordpress-develop.dev/](http://build.wordpress-develop.dev/) for the version of those development files built with Grunt
+    * [http://wordpress.skydreams.com.dev/](http://wordpress.skydreams.com.dev/) for the weetjes network site
+    * [http://dakkapel-weetjes.nl.dev/](http://dakkapel-weetjes.nl.dev/) for a mapped weetjes domain
+    * [http://homedeal.nl.dev/](http://homedeal.nl.dev/) for the HomeDeal main domain
+    * [http://blog.homedeal.nl.dev/](http://blog.homedeal.nl.dev/) for the HomeDeal blog domain
 
 Fancy, yeah?
 

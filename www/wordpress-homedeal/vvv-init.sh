@@ -11,21 +11,29 @@ if [ ! -d "htdocs" ]; then
 cd ./htdocs
 	cd /vagrant/www/wordpress-homedeal/
 	wp core download --allow-root
-	wp core install --url="homedeal.nl.dev" --title="HomeDeal" --admin_user="skydev" --admin_password="skydev" --admin_email="test@skydreams.com"
 	wp core config --dbname="wordpress-homedeal" --dbuser=skydev --dbpass=skydev --dbhost="localhost" --allow-root --extra-php <<PHP
 define('WP_DEBUG', true );
 define('WP_DEBUG_LOG', true );
 define('PARTNER_URL', 'http://partners.skydreams.com.dev');
 define('SKYAPI_URL', 'http://skyapi.net.dev');
 define('ALLOW_UNFILTERED_UPLOADS', true );
-PHP
 
-	echo 'Add skydev user'
-	wp user create skydev test@skydreams.com --user_pass=skydev --role=administrator
+define('WP_ALLOW_MULTISITE', true );
+define('MULTISITE', true);
+define('SUBDOMAIN_INSTALL', false);
+define('DOMAIN_CURRENT_SITE', 'homedeal.nl.dev');
+define('PATH_CURRENT_SITE', '/');
+define('SITE_ID_CURRENT_SITE', 1);
+define('BLOG_ID_CURRENT_SITE', 1);
+
+PHP
 fi
 
-cd /vagrant/www/wordpress-homedeal/htdocs
+if ! $(wp core is-installed --network); then
+	( exec "/vagrant/scripts/wordpress-homedeal/import-db.sh" )
+	( exec "/vagrant/scripts/wordpress-homedeal/install-blog-theme.sh" )
+fi
 
-wp core update-db
-
-source /vagrant/scripts/wordpress-homedeal/update-plugins.sh;
+if $(wp core is-installed --network); then
+	( exec "/vagrant/scripts/wordpress-homedeal/update-plugins.sh" )
+fi

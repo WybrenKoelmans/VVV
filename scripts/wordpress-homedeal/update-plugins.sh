@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
 
-cd /vagrant/www/wordpress-homedeal/htdocs/
+cd /vagrant/www/wordpress-homedeal/
 
 plugins=(
-    advanced-code-editor
     advanced-custom-fields
-    akismet
     better-wordpress-showhide-elements
-    disqus-comment-system
-    orbisius-child-theme-creator
     raw-html
     tablepress
     tinymce-advanced
@@ -22,10 +18,10 @@ echo 'Install required plugins'
 
 for plugin in "${plugins[@]}"
 do
-if ! wp plugin is-installed $plugin; then
-	wp plugin install $plugin --activate
+if ! wp plugin is-installed $plugin --allow-root; then
+	wp plugin install $plugin --allow-root --activate-network
 fi
 done
 
 echo 'Updating Plugins'
-wp plugin update --all
+wp plugin update --allow-root --all
