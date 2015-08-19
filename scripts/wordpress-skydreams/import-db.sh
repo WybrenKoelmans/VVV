@@ -29,9 +29,6 @@ do
 
 	# Add skydev user to each site
 	wp user set-role skydev administrator --url=$url --allow-root
-
-	# Change all themes to weetjes, because child themes arent' available in our repo
-	wp option update stylesheet weetjes --url=$url --allow-root
 done
 
 wp db query "DELETE FROM wp_domain_mapping WHERE wp_domain_mapping.active = 0;" --path='/vagrant/www/wordpress-skydreams/htdocs/' --allow-root
