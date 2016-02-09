@@ -60,32 +60,33 @@ Entirely different server configurations can be created by modifying the files i
 1. Install [Vagrant 1.6.x](http://www.vagrantup.com/downloads.html)
     * `vagrant` will now be available as a command in your terminal, try it out.
     * ***Note:*** If Vagrant is already installed, use `vagrant -v` to check the version. You may want to consider upgrading if a much older version is in use.
-1. Install the [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater) plugin with `vagrant plugin install vagrant-hostsupdater`
-    * Note: This step is not a requirement, though it does make the process of starting up a virtual machine nicer by automating the entries needed in your local machine's `hosts` file to access the provisioned VVV domains in your browser.
-    * If you choose not to install this plugin, manual entries should be added to your local `hosts` file that looks like this: 
+1. Add the following entries to your local `hosts` file:
     ``` hosts
     192.168.50.4  vvv.dev  
     192.168.50.4  local.wordpress.dev  
     192.168.50.4  local.wordpress-trunk.dev  
     192.168.50.4  src.wordpress-develop.dev  
     192.168.50.4  build.wordpress-develop.dev  
-    192.168.50.4  wordpress.skydreams.com.dev  
-    192.168.50.4  alarmsysteem-weetjes.nl.dev  
-    192.168.50.4  cvketel-weetjes.nl.dev  
-    192.168.50.4  dakdekker-weetjes.nl.dev  
-    192.168.50.4  dakkapel-weetjes.nl.dev  
-    192.168.50.4  dubbelglas-weetjes.nl.dev  
-    192.168.50.4  gevelreiniging-weetjes.nl.dev  
-    192.168.50.4  hekwerk-weetjes.nl.dev  
-    192.168.50.4  helpikverhuis.nl.dev  
-    192.168.50.4  hovenier-weetjes.nl.dev  
-    192.168.50.4  isolatie-weetjes.nl.dev  
-    192.168.50.4  kozijnen-weetjes.nl.dev  
-    192.168.50.4  rolluiken-weetjes.nl.dev  
-    192.168.50.4  schilder-weetjes.nl.dev  
-    192.168.50.4  stucadoor-weetjes.nl.dev  
-    192.168.50.4  tegelzetter-weetjes.nl.dev  
-    192.168.50.4  zonnepanelen-weetjes.nl.dev  
+    192.168.50.4  wordpress.skydreams.com.dev
+    192.168.50.4  alarmsysteem-weetjes.nl.dev
+    192.168.50.4  cvketel-weetjes.nl.dev
+    192.168.50.4  dakdekker-weetjes.nl.dev
+    192.168.50.4  dakkapel-weetjes.nl.dev
+    192.168.50.4  dakwerken-weetjes.be.dev
+    192.168.50.4  dubbelglas-weetjes.nl.dev
+    192.168.50.4  gevelreiniging-weetjes.nl.dev
+    192.168.50.4  hekwerk-weetjes.nl.dev
+    192.168.50.4  helpikverhuis.nl.dev
+    192.168.50.4  hovenier-weetjes.nl.dev
+    192.168.50.4  isolatie-weetjes.nl.dev
+    192.168.50.4  kozijnen-weetjes.nl.dev
+    192.168.50.4  ramen-weetjes.be.dev
+    192.168.50.4  rolluiken-weetjes.nl.dev
+    192.168.50.4  schilder-weetjes.be.dev
+    192.168.50.4  schilder-weetjes.nl.dev
+    192.168.50.4  stucadoor-weetjes.nl.dev
+    192.168.50.4  tegelzetter-weetjes.nl.dev
+    192.168.50.4  zonnepanelen-weetjes.nl.dev
     192.168.50.4  zonwering-weetjes.nl.dev
     192.168.50.4  homedeal.nl.dev
     ```
@@ -98,8 +99,8 @@ Entirely different server configurations can be created by modifying the files i
     * OR download and extract the repository master [zip file](https://github.com/varying-vagrant-vagrants/vvv/archive/master.zip) to a `vagrant-local` directory on your computer.
     * OR download and extract a [stable release](https://github.com/varying-vagrant-vagrants/vvv/releases) zip file if you'd like some extra comfort.
 1. Move a database copies to the root of this repository:
-    * Copy the latest Weetjes database dump from `\\nas\it\Dev-DBs\` and put this file in the root of this repository
-    * Copy the latest HomeDeal database dump from `\\nas\it\Dev-DBs\` and put this file in the root of this repository
+    * Copy the latest Weetjes database dump from `\\srv-fs01\it\Dev-DBs\` and put this file in the root of this repository
+    * Copy the latest HomeDeal database dump from `\\srv-fs01\it\Dev-DBs\` and put this file in the root of this repository
 1. In a command prompt, change into the new directory with `cd vagrant-local`
 1. Start the Vagrant environment with `vagrant up`
     * Be patient as the magic happens. This could take a while on the first run as your local machine downloads the required files.
@@ -107,9 +108,20 @@ Entirely different server configurations can be created by modifying the files i
 1. Add the latest SkyDreams weetjes theme to the new WordPress installation:
 	* You can find our theme in the [https://github.com/SkyDreams/wordpress-theme-weetjes](https://github.com/SkyDreams/wordpress-theme-weetjes) repository
 	* Clone or copy paste this theme to `vagrant-local/www/wordpress-skydreams/htdocs/wp-content/themes/weetjes`
+1. Add the latest SkyDreams weetjes-v2 theme to the new WordPress installation:
+	* You can find our theme in the [https://github.com/SkyDreams/wordpress-theme-weetjes-v2](https://github.com/SkyDreams/wordpress-theme-weetjes-v2) repository
+	* Clone or copy paste this theme to `vagrant-local/www/wordpress-skydreams/htdocs/wp-content/themes/weetjes-v2`
+1. Update Weetjes plugins
+    * Extract plugins_homedeal.zip from `\\srv-fs01\it\Dev-DBs\` in the `vagrant-local/www/wordpress-skydreams/htdocs/wp-content/plugins` directory
+1. Update Weetjes assets
+    * Extract uploads_weetjes.zip from `\\srv-fs01\it\Dev-DBs\` in the `vagrant-local/www/wordpress-skydreams/htdocs/wp-content/uploads` directory
 1. Add the latest SkyDreams HomeDeal theme to the new WordPress installation:
 	* You can find our theme in the [https://github.com/SkyDreams/wordpress-theme-homedeal](https://github.com/SkyDreams/wordpress-theme-homedeal) repository
 	* Clone or copy paste this theme to `vagrant-local/www/wordpress-homedeal/htdocs/wp-content/themes/homedeal`
+1. Update HomeDeal plugins
+    * Extract plugins_homedeal.zip from `\\srv-fs01\it\Dev-DBs\` in the `vagrant-local/www/wordpress-homedeal/htdocs/wp-content/plugins` directory
+1. Update HomeDeal assets
+    * Extract uploads_homedeal.zip from `\\srv-fs01\it\Dev-DBs\` in the `vagrant-local/www/wordpress-homedeal/htdocs/wp-content/uploads` directory
 1. Visit any of the following default sites in your browser (admin credentials skydev:skydev):
 	* [http://vvv.dev/](http://vvv.dev/) for a default dashboard containing several useful tools and a site overview
     * [http://wordpress.skydreams.com.dev/](http://wordpress.skydreams.com.dev/) for the weetjes network site
