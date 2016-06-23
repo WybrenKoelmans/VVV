@@ -7,6 +7,8 @@ wp db query "SELECT domain FROM wp_domain_mapping wdm WHERE wdm.active = 1" | se
 do
 cd /vagrant/www/wordpress-skydreams/domains
 
+mkdir $url -p
+
 cd $url
 
 echo $url > vvv-hosts
