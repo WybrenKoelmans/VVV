@@ -61,34 +61,38 @@ Entirely different server configurations can be created by modifying the files i
     * `vagrant` will now be available as a command in your terminal, try it out.
     * ***Note:*** If Vagrant is already installed, use `vagrant -v` to check the version. You may want to consider upgrading if a much older version is in use.
 1. Add the following entries to your local `hosts` file:
-    ``` hosts
-    192.168.50.4  vvv.dev  
-    192.168.50.4  local.wordpress.dev  
-    192.168.50.4  local.wordpress-trunk.dev  
-    192.168.50.4  src.wordpress-develop.dev  
-    192.168.50.4  build.wordpress-develop.dev  
+    ```hosts
+    192.168.50.4  vvv.dev
+    192.168.50.4  local.wordpress.dev
+    192.168.50.4  local.wordpress-trunk.dev
+    192.168.50.4  src.wordpress-develop.dev
+    192.168.50.4  build.wordpress-develop.dev
     192.168.50.4  wordpress.skydreams.com.dev
-    192.168.50.4  alarmsysteem-weetjes.nl.dev
-    192.168.50.4  cvketel-weetjes.nl.dev
-    192.168.50.4  dakdekker-weetjes.nl.dev
-    192.168.50.4  dakkapel-weetjes.nl.dev
-    192.168.50.4  dakwerken-weetjes.be.dev
-    192.168.50.4  dubbelglas-weetjes.nl.dev
-    192.168.50.4  gevelreiniging-weetjes.nl.dev
-    192.168.50.4  hekwerk-weetjes.nl.dev
-    192.168.50.4  helpikverhuis.nl.dev
-    192.168.50.4  hovenier-weetjes.nl.dev
-    192.168.50.4  isolatie-weetjes.nl.dev
-    192.168.50.4  kozijnen-weetjes.nl.dev
-    192.168.50.4  ramen-weetjes.be.dev
-    192.168.50.4  rolluiken-weetjes.nl.dev
-    192.168.50.4  schilder-weetjes.be.dev
-    192.168.50.4  schilder-weetjes.nl.dev
-    192.168.50.4  stucadoor-weetjes.nl.dev
-    192.168.50.4  tegelzetter-weetjes.nl.dev
-    192.168.50.4  zonnepanelen-weetjes.nl.dev
-    192.168.50.4  zonwering-weetjes.nl.dev
-    192.168.50.4  homedeal.nl.dev
+    192.168.50.4 alarmsysteem-weetjes.nl.dev
+    192.168.50.4 cvketel-weetjes.nl.dev
+    192.168.50.4 dakdekker-weetjes.nl.dev
+    192.168.50.4 dakkapel-weetjes.nl.dev
+    192.168.50.4 dakwerken-weetjes.be.dev
+    192.168.50.4 dubbelglas-weetjes.nl.dev
+    192.168.50.4 gevelreiniging-weetjes.nl.dev
+    192.168.50.4 hekwerk-weetjes.nl.dev
+    192.168.50.4 helpikverhuis.nl.dev
+    192.168.50.4 hovenier-weetjes.nl.dev
+    192.168.50.4 isolatie-weetjes.be.dev
+    192.168.50.4 isolatie-weetjes.nl.dev
+    192.168.50.4 kozijnen-weetjes.nl.dev
+    192.168.50.4 ramen-weetjes.be.dev
+    192.168.50.4 rolluiken-weetjes.nl.dev
+    192.168.50.4 schilder-weetjes.be.dev
+    192.168.50.4 schilder-weetjes.nl.dev
+    192.168.50.4 stucadoor-weetjes.nl.dev
+    192.168.50.4 tegelzetter-weetjes.nl.dev
+    192.168.50.4 tuin-weetjes.be.dev
+    192.168.50.4 verwarmingsketel-weetjes.be.dev
+    192.168.50.4 zonnepanelen-weetjes.be.dev
+    192.168.50.4 zonnepanelen-weetjes.nl.dev
+    192.168.50.4 zonwering-weetjes.nl.dev
+    192.168.50.4 homedeal.nl.dev
     ```
 1. Install the [vagrant-triggers](https://github.com/emyl/vagrant-triggers) plugin with `vagrant plugin install vagrant-triggers`
     * Note: This step is not a requirement. When installed, it allows for various scripts to fire when issuing commands such as `vagrant halt` and `vagrant destroy`.
@@ -108,9 +112,12 @@ Entirely different server configurations can be created by modifying the files i
 1. Add the latest SkyDreams weetjes theme to the new WordPress installation:
 	* You can find our theme in the [https://github.com/SkyDreams/wordpress-theme-weetjes](https://github.com/SkyDreams/wordpress-theme-weetjes) repository
 	* Clone or copy paste this theme to `vagrant-local/www/wordpress-skydreams/htdocs/wp-content/themes/weetjes`
-1. Add the latest SkyDreams weetjes-v2 theme to the new WordPress installation:
-	* You can find our theme in the [https://github.com/SkyDreams/wordpress-theme-weetjes-v2](https://github.com/SkyDreams/wordpress-theme-weetjes-v2) repository
+1. Add version 2.0 of the SkyDreams weetjes-v2 theme to the new WordPress installation:
+	* You can find our theme in the [https://github.com/SkyDreams/wordpress-theme-weetjes-v2/tree/2.0](https://github.com/SkyDreams/wordpress-theme-weetjes-v2/tree/2.0) repository
 	* Clone or copy paste this theme to `vagrant-local/www/wordpress-skydreams/htdocs/wp-content/themes/weetjes-v2`
+1. Add version 2.1 of the SkyDreams weetjes-v2 theme to the new WordPress installation:
+	* You can find our theme in the [https://github.com/SkyDreams/wordpress-theme-weetjes-v2/tree/2.1](https://github.com/SkyDreams/wordpress-theme-weetjes-v2/tree/2.1) repository
+	* Clone or copy paste this theme to `vagrant-local/www/wordpress-skydreams/htdocs/wp-content/themes/wordpress-theme-weetjes-v2.1`
 1. Update Weetjes plugins
     * Extract plugins_homedeal.zip from `\\srv-fs01\it\Dev-DBs\` in the `vagrant-local/www/wordpress-skydreams/htdocs/wp-content/plugins` directory
 1. Update Weetjes assets
