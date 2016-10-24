@@ -61,13 +61,8 @@ Entirely different server configurations can be created by modifying the files i
     * `vagrant` will now be available as a command in your terminal, try it out.
     * ***Note:*** If Vagrant is already installed, use `vagrant -v` to check the version. You may want to consider upgrading if a much older version is in use.
 1. Add the following entries to your local `hosts` file:
-    ```hosts
-    192.168.50.4  vvv.dev
-    192.168.50.4  local.wordpress.dev
-    192.168.50.4  local.wordpress-trunk.dev
-    192.168.50.4  src.wordpress-develop.dev
-    192.168.50.4  build.wordpress-develop.dev
-    192.168.50.4  wordpress.skydreams.com.dev
+    192.168.50.4 vvv
+    192.168.50.4 vvv.dev
     192.168.50.4 alarmsysteem-weetjes.nl.dev
     192.168.50.4 cvketel-weetjes.nl.dev
     192.168.50.4 dakdekker-weetjes.nl.dev
@@ -77,7 +72,11 @@ Entirely different server configurations can be created by modifying the files i
     192.168.50.4 gevelreiniging-weetjes.nl.dev
     192.168.50.4 hekwerk-weetjes.nl.dev
     192.168.50.4 helpikverhuis.nl.dev
+    192.168.50.4 homedeal.be.dev
+    192.168.50.4 homedeal.com.dev
+    192.168.50.4 homedeal.nl.dev
     192.168.50.4 hovenier-weetjes.nl.dev
+    192.168.50.4 infissi365.it.dev
     192.168.50.4 isolatie-weetjes.be.dev
     192.168.50.4 isolatie-weetjes.nl.dev
     192.168.50.4 kozijnen-weetjes.nl.dev
@@ -89,10 +88,10 @@ Entirely different server configurations can be created by modifying the files i
     192.168.50.4 tegelzetter-weetjes.nl.dev
     192.168.50.4 tuin-weetjes.be.dev
     192.168.50.4 verwarmingsketel-weetjes.be.dev
+    192.168.50.4 wordpress.skydreams.com.dev
     192.168.50.4 zonnepanelen-weetjes.be.dev
     192.168.50.4 zonnepanelen-weetjes.nl.dev
     192.168.50.4 zonwering-weetjes.nl.dev
-    192.168.50.4 homedeal.nl.dev
     ```
 1. Install the [vagrant-triggers](https://github.com/emyl/vagrant-triggers) plugin with `vagrant plugin install vagrant-triggers`
     * Note: This step is not a requirement. When installed, it allows for various scripts to fire when issuing commands such as `vagrant halt` and `vagrant destroy`.
