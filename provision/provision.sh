@@ -727,13 +727,13 @@ custom_vvv(){
   find /etc/nginx/custom-sites -name 'vvv-auto-*.conf' -exec rm {} \;
 
   # Look for site setup scripts
-#  for SITE_CONFIG_FILE in $(find /srv/www -maxdepth 5 -name 'vvv-init.sh'); do
-#    DIR="$(dirname "$SITE_CONFIG_FILE")"
-#    (
-#    cd "$DIR"
-#    source vvv-init.sh
-#    )
-#  done
+  for SITE_CONFIG_FILE in $(find /srv/www -maxdepth 5 -name 'vvv-init.sh'); do
+    DIR="$(dirname "$SITE_CONFIG_FILE")"
+    (
+    cd "$DIR"
+    source vvv-init.sh
+    )
+  done
 
   # Look for Nginx vhost files, symlink them into the custom sites dir
   for SITE_CONFIG_FILE in $(find /srv/www -maxdepth 5 -name 'vvv-nginx.conf'); do
