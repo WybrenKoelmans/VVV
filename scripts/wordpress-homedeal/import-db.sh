@@ -20,6 +20,21 @@ php /vagrant/scripts/search-replace-db/srdb.cli.php -h localhost -u skydev -n wo
 echo "Start db string replacement #4: replace homedeal.nl -> homedeal.nl.dev"
 php /vagrant/scripts/search-replace-db/srdb.cli.php -h localhost -u skydev -n wordpress-homedeal -p skydev -s homedeal.nl -r homedeal.nl.dev -v false
 
+echo "Start db string replacement #1: replace https://www.homedeal.be -> http://homedeal.be"
+php /vagrant/scripts/search-replace-db/srdb.cli.php -h localhost -u skydev -n wordpress-homedeal -p skydev -s https://www.homedeal.be -r http://homedeal.be -v false
+
+echo "Start db string replacement #2: replace www.homedeal.be -> homedeal.be"
+php /vagrant/scripts/search-replace-db/srdb.cli.php -h localhost -u skydev -n wordpress-homedeal -p skydev -s www.homedeal.be -r homedeal.be -v false
+
+echo "Start db string replacement #4: replace homedeal.be -> homedeal.be.dev"
+php /vagrant/scripts/search-replace-db/srdb.cli.php -h localhost -u skydev -n wordpress-homedeal -p skydev -s homedeal.be -r homedeal.be.dev -v false
+
+echo "Start db string replacement #4: replace https://homedeal.com -> http://homedeal.com.dev"
+php /vagrant/scripts/search-replace-db/srdb.cli.php -h localhost -u skydev -n wordpress-homedeal -p skydev -s https://homedeal.com -r http://homedeal.com -v false
+
+echo "Start db string replacement #4: replace homedeal.com -> homedeal.com.dev"
+php /vagrant/scripts/search-replace-db/srdb.cli.php -h localhost -u skydev -n wordpress-homedeal -p skydev -s homedeal.com -r homedeal.com.dev -v false
+
 cd /vagrant/www/wordpress-homedeal/htdocs
 
 echo 'Add skydev user'
