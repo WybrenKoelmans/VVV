@@ -782,33 +782,33 @@ network_check
 # Package and Tools Install
 echo " "
 echo "Main packages check and install."
-#package_install
-#tools_install
-#nginx_setup
-#mailcatcher_setup
-#phpfpm_setup
+package_install
+tools_install
+nginx_setup
+mailcatcher_setup
+phpfpm_setup
 services_restart
-#mysql_setup
+mysql_setup
 #
-#network_check
+network_check
 # WP-CLI and debugging tools
 echo " "
 echo "Installing/updating wp-cli and debugging tools"
 
-#wp_cli
-#memcached_admin
-#opcached_status
-#webgrind_install
-#php_codesniff
-#phpmyadmin_setup
+wp_cli
+memcached_admin
+opcached_status
+webgrind_install
+php_codesniff
+phpmyadmin_setup
 #
 #network_check
 # Time for WordPress!
 echo " "
 #echo "Installing/updating WordPress Stable, Trunk & Develop"
 
-#wordpress_default
-#wpsvn_check
+wordpress_default
+wpsvn_check
 #wordpress_trunk
 #wordpress_develop
 
