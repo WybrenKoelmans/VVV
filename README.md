@@ -98,7 +98,7 @@ Entirely different server configurations can be created by modifying the files i
     * By default, if vagrant-triggers is installed, a `db_backup` script will run on halt, suspend, and destroy that backs up each database to a `dbname.sql` file in the `{vvv}/database/backups/` directory. These will then be imported automatically if starting from scratch. Custom scripts can be added to override this default behavior.
     * If vagrant-triggers is not installed, VVV will not provide automated database backups.
 1. Clone or extract the Varying Vagrant Vagrants project into a local directory
-    * `git clone git://github.com/Varying-Vagrant-Vagrants/VVV.git vagrant-local`
+    * `git clone git@github.com:TwanVermeulen/VVV.git vagrant-local`
     * OR download and extract the repository `develop` branch [zip file](https://github.com/varying-vagrant-vagrants/vvv/archive/develop.zip) to a `vagrant-local` directory on your computer.
     * OR download and extract a [stable release](https://github.com/varying-vagrant-vagrants/vvv/releases) zip file if you'd like some extra comfort.
 1. Move a database copies to the root of this repository:
