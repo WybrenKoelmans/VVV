@@ -76,5 +76,6 @@
 /www/default/database-admin/config.inc.custom.php
 
 # Exclude vvv dashboard files
+!/www/default/material-dashboard/
 !/www/default/dashboard-custom.php
 !/www/default/style.css
