@@ -727,13 +727,13 @@ custom_vvv(){
   find /etc/nginx/custom-sites -name 'vvv-auto-*.conf' -exec rm {} \;
 
   # Look for site setup scripts
-  for SITE_CONFIG_FILE in $(find /srv/www -maxdepth 5 -name 'vvv-init.sh'); do
-    DIR="$(dirname "$SITE_CONFIG_FILE")"
-    (
-    cd "$DIR"
-    source vvv-init.sh
-    )
-  done
+#  for SITE_CONFIG_FILE in $(find /srv/www -maxdepth 5 -name 'vvv-init.sh'); do
+#    DIR="$(dirname "$SITE_CONFIG_FILE")"
+#    (
+#    cd "$DIR"
+#    source vvv-init.sh
+#    )
+#  done
 
   # Look for Nginx vhost files, symlink them into the custom sites dir
   for SITE_CONFIG_FILE in $(find /srv/www -maxdepth 5 -name 'vvv-nginx.conf'); do
@@ -782,35 +782,35 @@ network_check
 # Package and Tools Install
 echo " "
 echo "Main packages check and install."
-package_install
-tools_install
-nginx_setup
-mailcatcher_setup
-phpfpm_setup
+#package_install
+#tools_install
+#nginx_setup
+#mailcatcher_setup
+#phpfpm_setup
 services_restart
-mysql_setup
-
-network_check
+#mysql_setup
+#
+#network_check
 # WP-CLI and debugging tools
 echo " "
 echo "Installing/updating wp-cli and debugging tools"
 
-wp_cli
-memcached_admin
-opcached_status
-webgrind_install
-php_codesniff
-phpmyadmin_setup
-
-network_check
+#wp_cli
+#memcached_admin
+#opcached_status
+#webgrind_install
+#php_codesniff
+#phpmyadmin_setup
+#
+#network_check
 # Time for WordPress!
 echo " "
-echo "Installing/updating WordPress Stable, Trunk & Develop"
+#echo "Installing/updating WordPress Stable, Trunk & Develop"
 
-wordpress_default
-wpsvn_check
-wordpress_trunk
-wordpress_develop
+#wordpress_default
+#wpsvn_check
+#wordpress_trunk
+#wordpress_develop
 
 # VVV custom site import
 echo " "
