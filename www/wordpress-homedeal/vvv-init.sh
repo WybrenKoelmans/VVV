@@ -21,12 +21,15 @@ define('ALLOW_UNFILTERED_UPLOADS', true );
 define('WP_ALLOW_MULTISITE', true );
 define('MULTISITE', true);
 define('SUBDOMAIN_INSTALL', false);
-define('DOMAIN_CURRENT_SITE', 'homedeal.nl.dev');
+define('DOMAIN_CURRENT_SITE', 'homedeal.com.dev');
 define('PATH_CURRENT_SITE', '/');
 define('SITE_ID_CURRENT_SITE', 1);
 define('BLOG_ID_CURRENT_SITE', 1);
 
+define( 'SUNRISE', 'on' );
 PHP
+	echo 'Copy sunrise.php to correct location and adjust our wp-config to support domain mapping'
+	cp /vagrant/www/wordpress-homedeal/sunrise.php /vagrant/www/wordpress-homedeal/htdocs/wp-content/sunrise.php
 fi
 
 if ! $(wp core is-installed --network); then
