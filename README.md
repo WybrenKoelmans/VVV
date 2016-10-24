@@ -61,6 +61,7 @@ Entirely different server configurations can be created by modifying the files i
     * `vagrant` will now be available as a command in your terminal, try it out.
     * ***Note:*** If Vagrant is already installed, use `vagrant -v` to check the version. You may want to consider upgrading if a much older version is in use.
 1. Add the following entries to your local `hosts` file:
+    ```hosts
     192.168.50.4 vvv
     192.168.50.4 vvv.dev
     192.168.50.4 alarmsysteem-weetjes.nl.dev
