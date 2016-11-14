@@ -1,22 +1,23 @@
 import { Iterable } from 'immutable'
 import { compose, createStore, combineReducers, applyMiddleware } from 'redux'
 import { hashHistory } from 'react-router'
-import { syncHistory } from 'redux-simple-router'
+import { syncHistory } from 'react-router-redux'
 import { persistState } from 'redux-devtools'
 import thunk from 'redux-thunk'
 import reducers from './reducers'
-import DevTools from './components/DevTools';
-
-const app = combineReducers(reducers)
+import DevTools from './components/DevTools'
 
 const reduxRouterMiddleware = syncHistory(hashHistory)
 
-const store = compose(
-  applyMiddleware(thunk),
-  applyMiddleware(reduxRouterMiddleware),
-  DevTools.instrument(),
-  persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
-)(createStore)(app)
+const store = createStore(
+  combineReducers(reducers),
+  compose(
+    applyMiddleware(thunk),
+    applyMiddleware(reduxRouterMiddleware),
+    DevTools.instrument(),
+    persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
+  )
+)
 
 reduxRouterMiddleware.listenForReplays(store)
 

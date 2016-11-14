@@ -29,11 +29,16 @@ class Sites extends Base
      * @param  int    $depth Scan depth (defaults to 2 levels)
      * @return array         List of VVV sites found.
      */
-    private function getSitesInPath($root, $depth = 3)
+    private function getSitesInPath($root, $depth = 2)
     {
 
         // Default sites:
-        $sites = [];
+        $sites = [
+            'wordpress-default'       => new Site('wordpress-default', ['local.wordpress.dev']),
+            'wordpress-trunk'         => new Site('wordpress-trunk', ['local.wordpress-trunk.dev']),
+            'wordpress-develop/src'   => new Site('wordpress-develop/src', ['src.wordpress-develop.dev']),
+            'wordpress-develop/build' => new Site('wordpress-develop/build', ['build.wordpress-develop.dev']),
+        ];
 
         $files = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($root, \RecursiveDirectoryIterator::SKIP_DOTS)

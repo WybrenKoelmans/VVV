@@ -1,24 +1,8 @@
 import React from 'react'
 import { render } from 'react-dom'
-import PureRenderMixin from 'react-addons-pure-render-mixin'
-import MUI from 'material-ui'
+import { Avatar, Card, CardHeader, CardText, CardTitle, CardMedia, CardActions, FlatButton, RaisedButton, SvgIcon, List, ListItem } from 'material-ui'
 import Highlight from 'react-highlighter'
 import WordPressIcon from '../images/wordpress.png'
-
-const {
-  Avatar,
-  Card,
-  CardHeader,
-  CardText,
-  CardTitle,
-  CardMedia,
-  CardActions,
-  FlatButton,
-  RaisedButton,
-  SvgIcon,
-  List,
-  ListItem,
-} = MUI
 
 const getHostUrl        = host => 'http://' + host
 const getSiteActionKey  = (item, action = '') => item.hosts[0] + '_' + action
@@ -82,8 +66,6 @@ const Site = props => {
     </Card>
   )
 }
-
-Site.mixins = [PureRenderMixin]
 
 Site.propTypes = {
   key:    React.PropTypes.string,

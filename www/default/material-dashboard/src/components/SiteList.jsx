@@ -1,14 +1,8 @@
 import React from 'react'
 import { render } from 'react-dom'
-import PureRenderMixin from 'react-addons-pure-render-mixin'
-import MUI from 'material-ui'
+import { List } from 'material-ui'
 import Search from './Search'
 import Site from './Site'
-
-const {
-  GridList,
-  List,
-} = MUI
 
 function filterSites(sites, query) {
   return sites
@@ -45,8 +39,6 @@ SiteList.propTypes = {
   sites:    React.PropTypes.arrayOf(React.PropTypes.object),
   xdebug:   React.PropTypes.bool,
 }
-
-SiteList.mixins = [PureRenderMixin]
 
 const styles = {
   container: {

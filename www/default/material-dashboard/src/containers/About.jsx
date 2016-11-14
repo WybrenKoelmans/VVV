@@ -1,15 +1,8 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import PureRenderMixin from 'react-addons-pure-render-mixin'
-import MUI from 'material-ui'
-
-const {
-  Paper,
-} = MUI
+import { Paper } from 'material-ui'
 
 const About = React.createClass({
-
-  mixins: [PureRenderMixin],
 
   render() {
     return (
@@ -33,8 +26,8 @@ const About = React.createClass({
           <li><a href="https://facebook.github.io/react/">React</a></li>
           <li><a href="https://github.com/helior/react-highlighter">React Highlighter</a></li>
           <li><a href="https://github.com/rackt/react-router">React Router</a></li>
+          <li><a href="https://github.com/rackt/react-router-redux">React Router Redux</a></li>
           <li><a href="https://github.com/rackt/redux">Redux</a></li>
-          <li><a href="https://github.com/rackt/redux-simple-router">Redux Simple Router</a></li>
           <li><a href="https://github.com/gaearon/redux-thunk">Redux Thunk</a></li>
         </ul>
       </Paper>

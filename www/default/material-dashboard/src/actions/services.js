@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-fetch'
-import _ from 'lodash'
 
 export const ActionTypes = {
   REQUEST_SERVICE_STATUS:       'REQUEST_SERVICE_STATUS',
@@ -13,10 +12,10 @@ export function requestServiceStatus() {
   }
 }
 
-export function receiveServiceStatus(services) {
+export function receiveServiceStatus(serviceList) {
   return {
     type:    ActionTypes.RECEIVE_SERVICE_STATUS,
-    payload: { services },
+    payload: { serviceList },
   }
 }
 
@@ -30,14 +29,14 @@ export function receiveServiceStatusError(error) {
 
 export function getServiceStatus(service = '') {
   return async dispatch => {
-    const url = 'http://vvv/api/v1/services' + (service ? '/' + encodeURIComponent(service) : '')
+    const url = '//vvv/api/v1/services' + (service ? '/' + encodeURIComponent(service) : '')
 
     dispatch(requestServiceStatus())
 
     try {
-      const response = await fetch(url)
-      const services = await response.json()
-      dispatch(receiveServiceStatus(services))
+      const response    = await fetch(url)
+      const serviceList = await response.json()
+      dispatch(receiveServiceStatus(serviceList))
     } catch(error) {
       dispatch(receiveServiceStatusError(error))
     }
@@ -45,19 +44,15 @@ export function getServiceStatus(service = '') {
 }
 
 export function setServiceStatus(service = '', status = '') {
-  if (!service || !status) {
-    return
-  }
-
   return async dispatch => {
-    const url = 'http://vvv/api/v1/services/' + encodeURIComponent(service) + '/' + encodeURIComponent(status)
+    const url = '//vvv/api/v1/services/' + encodeURIComponent(service) + '/' + encodeURIComponent(status)
 
     dispatch(requestServiceStatus())
 
     try {
-      const response = await fetch(url, {method: 'put'})
-      const services = await response.json()
-      dispatch(receiveServiceStatus(services))
+      const response    = await fetch(url, {method: 'put'})
+      const serviceList = await response.json()
+      dispatch(receiveServiceStatus(serviceList))
     } catch(error) {
       dispatch(receiveServiceStatusError(error))
     }
