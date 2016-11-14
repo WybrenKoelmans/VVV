@@ -34,9 +34,7 @@ fi
 
 if ! $(wp core is-installed --network); then
 	( exec "/vagrant/scripts/wordpress-homedeal/import-db.sh" )
+    ( exec "/vagrant/scripts/wordpress-homedeal/import-plugins.sh" )
+    ( exec "/vagrant/scripts/wordpress-homedeal/import-uploads.sh" )
 	( exec "/vagrant/scripts/wordpress-homedeal/install-blog-theme.sh" )
-fi
-
-if $(wp core is-installed --network); then
-	( exec "/vagrant/scripts/wordpress-homedeal/update-plugins.sh" )
 fi

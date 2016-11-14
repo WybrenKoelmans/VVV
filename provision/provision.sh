@@ -807,8 +807,8 @@ phpmyadmin_setup
 echo " "
 #echo "Installing/updating WordPress Stable, Trunk & Develop"
 
-wordpress_default
-wpsvn_check
+#wordpress_default
+#wpsvn_check
 #wordpress_trunk
 #wordpress_develop
 

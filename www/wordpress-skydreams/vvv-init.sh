@@ -12,7 +12,7 @@ cd ./htdocs
 	cd /vagrant/www/wordpress-skydreams/
 
 	wp core download --allow-root
-	wp core config --dbname="wordpress-skydreams" --dbuser=skydev --dbpass=skydev --dbhost="localhost" --extra-php <<PHP
+	wp core config --dbname="wordpress-skydreams" --dbuser=skydev --dbpass=skydev --dbhost="localhost" --allow-root --extra-php <<PHP
 define('WP_DEBUG', true );
 define('WP_DEBUG_LOG', true );
 define('PARTNER_URL', 'http://partners.skydreams.com.dev');
@@ -37,10 +37,8 @@ fi
 
 if ! $(wp core is-installed --network); then
 	( exec "/vagrant/scripts/wordpress-skydreams/import-db.sh" )
-fi
-
-if $(wp core is-installed --network); then
-	( exec "/vagrant/scripts/wordpress-skydreams/update-plugins.sh" )
+	( exec "/vagrant/scripts/wordpress-skydreams/import-plugins.sh" )
+	( exec "/vagrant/scripts/wordpress-skydreams/import-uploads.sh" )
 fi
 
 cd -
