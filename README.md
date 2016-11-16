@@ -72,35 +72,39 @@ Entirely different server configurations can be created by modifying the files i
 ```
     192.168.50.4 vvv  
     192.168.50.4 vvv.dev  
-    192.168.50.4 alarmsysteem-weetjes.nl.dev  
-    192.168.50.4 cvketel-weetjes.nl.dev  
-    192.168.50.4 dakdekker-weetjes.nl.dev  
-    192.168.50.4 dakkapel-weetjes.nl.dev  
-    192.168.50.4 dakwerken-weetjes.be.dev  
-    192.168.50.4 dubbelglas-weetjes.nl.dev  
-    192.168.50.4 gevelreiniging-weetjes.nl.dev  
-    192.168.50.4 hekwerk-weetjes.nl.dev  
-    192.168.50.4 helpikverhuis.nl.dev  
-    192.168.50.4 homedeal.be.dev  
-    192.168.50.4 homedeal.com.dev  
-    192.168.50.4 homedeal.nl.dev  
-    192.168.50.4 hovenier-weetjes.nl.dev  
-    192.168.50.4 infissi365.it.dev  
-    192.168.50.4 isolatie-weetjes.be.dev  
-    192.168.50.4 isolatie-weetjes.nl.dev  
-    192.168.50.4 kozijnen-weetjes.nl.dev  
-    192.168.50.4 ramen-weetjes.be.dev  
-    192.168.50.4 rolluiken-weetjes.nl.dev  
-    192.168.50.4 schilder-weetjes.be.dev  
-    192.168.50.4 schilder-weetjes.nl.dev  
-    192.168.50.4 stucadoor-weetjes.nl.dev  
-    192.168.50.4 tegelzetter-weetjes.nl.dev  
-    192.168.50.4 tuin-weetjes.be.dev  
-    192.168.50.4 verwarmingsketel-weetjes.be.dev  
-    192.168.50.4 wordpress.skydreams.com.dev  
-    192.168.50.4 zonnepanelen-weetjes.be.dev  
-    192.168.50.4 zonnepanelen-weetjes.nl.dev  
-    192.168.50.4 zonwering-weetjes.nl.dev  
+    192.168.50.4 alarmsysteem-weetjes.nl.dev
+    192.168.50.4 alarmsystemen-weetjes.be.dev
+    192.168.50.4 cvketel-weetjes.nl.dev
+    192.168.50.4 dakdekker-weetjes.nl.dev
+    192.168.50.4 dakkapel-weetjes.nl.dev
+    192.168.50.4 dakwerken-weetjes.be.dev
+    192.168.50.4 dubbelglas-weetjes.nl.dev
+    192.168.50.4 gevelreiniging-weetjes.nl.dev
+    192.168.50.4 gevelrenovatie-weetjes.be.dev
+    192.168.50.4 hekwerk-weetjes.nl.dev
+    192.168.50.4 helpikverhuis.nl.dev
+    192.168.50.4 hovenier-weetjes.nl.dev
+    192.168.50.4 infissi365.it.dev
+    192.168.50.4 isolatie-weetjes.be.dev
+    192.168.50.4 isolatie-weetjes.nl.dev
+    192.168.50.4 kozijnen-weetjes.nl.dev
+    192.168.50.4 pleisterwerken-weetjes.be.dev
+    192.168.50.4 ramen-weetjes.be.dev
+    192.168.50.4 rolluiken-weetjes.nl.dev
+    192.168.50.4 schilder-weetjes.be.dev
+    192.168.50.4 schilder-weetjes.nl.dev
+    192.168.50.4 stucadoor-weetjes.nl.dev
+    192.168.50.4 tegelzetter-weetjes.nl.dev
+    192.168.50.4 tuin-weetjes.be.dev
+    192.168.50.4 verwarmingsketel-weetjes.be.dev
+    192.168.50.4 zonnepanelen-weetjes.be.dev
+    192.168.50.4 zonnepanelen-weetjes.nl.dev
+    192.168.50.4 zonwering-weetjes.nl.dev
+    192.168.50.4 blog.homedeal.nl.dev
+    192.168.50.4 homedeal.be.dev
+    192.168.50.4 homedeal.nl.dev
+    192.168.50.4 homedeal.com.dev 
+    192.168.50.4 wordpress.skydreams.com.dev
 ```
 1. Clone or extract the Varying Vagrant Vagrants project into a local directory
     * `git clone git@github.com:SkyDreams/VVV.git vagrant-local`
