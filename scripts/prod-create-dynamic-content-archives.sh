@@ -6,7 +6,7 @@ sudo cp /var/spool/holland/default/newest/backup_data/wordpress.sql.gz /tmp/
 sudo cp /var/spool/holland/default/newest/backup_data/wordpress_homedeal.sql.gz /tmp/
 sudo chown skyadmin /tmp/wordpress.sql.gz /tmp/wordpress_homedeal.sql.gz
 
-echo "Creating archive for weetjes upload directory.."
+echo "Creating archive for weetjes plugins directory.."
 tar -czf /tmp/wordpress_plugins.tar.gz \
     -C /var/www/app/default/wordpress/wp-content \
     plugins
@@ -16,7 +16,7 @@ tar -czf /tmp/wordpress_uploads.tar.gz \
     -C /var/www/app/default/wordpress/wp-content \
     uploads
 
-echo "Creating archive for homedeal uploads directory.."
+echo "Creating archive for homedeal plugins directory.."
 tar -czf /tmp/wordpress_homedeal_plugins.tar.gz \
     -C /var/www/app/homedeal/wp-content \
     plugins

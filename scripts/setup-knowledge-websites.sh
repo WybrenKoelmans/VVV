@@ -5,9 +5,8 @@ mysql -u root --password=root -e "GRANT ALL PRIVILEGES ON \`wordpress-skydreams\
 
 cd /vagrant/www/wordpress-skydreams/
 
-if [ ! -d "htdocs" ]; then
+if [ ! -f "htdocs/wp-config.php" ]; then
 	echo 'Installing WordPress (release version) in wordpress-skydreams/htdocs...'
-	mkdir ./htdocs
 cd ./htdocs
 	cd /vagrant/www/wordpress-skydreams/
 

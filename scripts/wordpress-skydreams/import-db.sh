@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-if [ ! -f /vagrant/wordpress_weetjes.sql.gz ]; then
-    echo "wordpress_weetjes.sql.gz can't be found. Please add this file (see docs) and provision again!"
+if [ ! -f /vagrant/wordpress.sql.gz ]; then
+    echo "wordpress.sql.gz can't be found. Please add this file (see docs) and provision again!"
     exit 0
 fi
 
 echo "Importing latest live db backup..."
-gzip -dc /vagrant/wordpress_weetjes.sql.gz | mysql --user=root --password=root wordpress-skydreams
+gzip -dc /vagrant/wordpress.sql.gz | mysql --user=root --password=root wordpress-skydreams
 
 echo "Start db string replacement #1: replace https://wordpress.skydreams.com -> http://wordpress.skydreams.com"
 php /vagrant/scripts/search-replace-db/srdb.cli.php -h localhost -u skydev -n wordpress-skydreams -p skydev -s https://wordpress.skydreams.com -r http://wordpress.skydreams.com -v false

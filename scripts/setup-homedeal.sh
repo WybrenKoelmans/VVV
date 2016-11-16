@@ -5,9 +5,8 @@ mysql -u root --password=root -e "GRANT ALL PRIVILEGES ON \`wordpress-homedeal\`
 
 cd /vagrant/www/wordpress-homedeal/
 
-if [ ! -d "htdocs" ]; then
+if [ ! -f "htdocs/wp-config.php" ]; then
 	echo 'Installing WordPress (release version) in wordpress-homedeal/htdocs...'
-	mkdir ./htdocs
 cd ./htdocs
 	cd /vagrant/www/wordpress-homedeal/
 	wp core download --allow-root

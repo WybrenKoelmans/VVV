@@ -7,6 +7,6 @@ if [ ! -f /vagrant/wordpress_uploads.tar.gz ]; then
     exit 0
 fi
 
-rm -rf /vagrant/www/wordpress-homedeal/htdocs/wp-content/uploads/*
+rm -rf /vagrant/www/wordpress-skydreams/htdocs/wp-content/uploads/*
 tar -xzhf /vagrant/wordpress_uploads.tar.gz \
-    -C /vagrant/www/wordpress-homedeal/htdocs/wp-content
+    -C /vagrant/www/wordpress-skydreams/htdocs/wp-content

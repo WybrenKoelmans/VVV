@@ -1,4 +1,4 @@
-##### This repository is modified by SkyDreams. Follow all [steps](#the-first-vagrant-up) below.
+### This repository is modified by SkyDreams. Follow all [steps](#installation---the-first-vagrant-up) below.
 ***
 
 ### To update
@@ -68,11 +68,6 @@ Entirely different server configurations can be created by modifying the files i
 1. Install [Vagrant 1.8.x](https://www.vagrantup.com/downloads.html)
     * `vagrant` will now be available as a command in your terminal, try it out.
     * ***Note:*** If Vagrant is already installed, use `vagrant -v` to check the version. You may want to consider upgrading if a much older version is in use.
-1. Optionally, install some convenient Vagrant plugins:
-    1. Install the [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater) plugin with `vagrant plugin install vagrant-hostsupdater`
-        * Note: This step is not a requirement, though it does make the process of starting up a virtual machine nicer by automating the entries needed in your local machine's `hosts` file to access the provisioned VVV domains in your browser.
-        * If you choose not to install this plugin, a manual entry should be added to your local `hosts` file that looks like this: `192.168.50.4  vvv.dev local.wordpress.dev src.wordpress-develop.dev build.wordpress-develop.dev`
-    1. Install the [vagrant-triggers](https://github.com/emyl/vagrant-triggers) plugin with `vagrant plugin install vagrant-triggers`
 1. Add the following entries to your local `hosts` file:
 ```
     192.168.50.4 vvv  
@@ -107,42 +102,24 @@ Entirely different server configurations can be created by modifying the files i
     192.168.50.4 zonnepanelen-weetjes.nl.dev  
     192.168.50.4 zonwering-weetjes.nl.dev  
 ```
-    * Note: This step is not a requirement. When installed, it allows for various scripts to fire when issuing commands such as `vagrant halt` and `vagrant destroy`.
-    * By default, if vagrant-triggers is installed, a `db_backup` script will run on halt, suspend, and destroy that backs up each database to a `dbname.sql` file in the `{vvv}/database/backups/` directory. These will then be imported automatically if starting from scratch. Custom scripts can be added to override this default behavior.
-    * If vagrant-triggers is not installed, VVV will not provide automated database backups.
-    1. Install the [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest) plugin with `vagrant plugin install vagrant-vbguest`.
-        * Note: This step is not a requirement. When installed, it keeps the [VirtualBox Guest Additions](https://www.virtualbox.org/manual/ch04.html) kernel modules of your guest synchronized with the version of your host whenever you do `vagrant up`. This can prevent some subtle shared folder errors.
 1. Clone or extract the Varying Vagrant Vagrants project into a local directory
-    * `git clone git@github.com:TwanVermeulen/VVV.git vagrant-local`
+    * `git clone git@github.com:SkyDreams/VVV.git vagrant-local`
     * OR download and extract the repository `develop` branch [zip file](https://github.com/varying-vagrant-vagrants/vvv/archive/develop.zip) to a `vagrant-local` directory on your computer.
     * OR download and extract a [stable release](https://github.com/varying-vagrant-vagrants/vvv/releases) zip file if you'd like some extra comfort.
-1. Move a database copies to the root of this repository:
-    * Copy the latest Weetjes database dump from `\\srv-fs01\it\Dev-DBs\` and put this file in the root of this repository
-    * Copy the latest HomeDeal database dump from `\\srv-fs01\it\Dev-DBs\` and put this file in the root of this repository
+1. Move the latest export of our WordPress CMS data to the root of this repository
+    * Copy all files from `\\srv-fs01\IT\WordPress\` to the root of this repository. 
+    These files contain the latest export of the database, uploads and plugins that are in use on our WordPress websites.
+1. Clone our WordPress themes into the vagrant-local repository
+    * Note: We have several themes that we use for our WordPress websites. 
+    They are hosted in different repositories and branches on github.
+    To make it easy to clone them all in your repository, a script is added to this repository.
+    * Open ***Git Bash*** on your local machine
+    * Navigate to this repository. For most users that will be `cd /c/repositories/skydreams/vagrant-local`
+    * Run `./scripts/install-themes.sh`. This script will clone the required themes in the correct directories
 1. In a command prompt, change into the new directory with `cd vagrant-local`
 1. Start the Vagrant environment with `vagrant up`
     * Be patient as the magic happens. This could take a while on the first run as your local machine downloads the required files.
     * Watch as the script ends, as an administrator or `su` ***password may be required*** to properly modify the hosts file on your local machine.
-1. Add the latest SkyDreams weetjes theme to the new WordPress installation:
-	* You can find our theme in the [https://github.com/SkyDreams/wordpress-theme-weetjes](https://github.com/SkyDreams/wordpress-theme-weetjes) repository
-	* Clone or copy paste this theme to `vagrant-local/www/wordpress-skydreams/htdocs/wp-content/themes/weetjes`
-1. Add version 2.0 of the SkyDreams weetjes-v2 theme to the new WordPress installation:
-	* You can find our theme in the [https://github.com/SkyDreams/wordpress-theme-weetjes-v2/tree/2.0](https://github.com/SkyDreams/wordpress-theme-weetjes-v2/tree/2.0) repository
-	* Clone or copy paste this theme to `vagrant-local/www/wordpress-skydreams/htdocs/wp-content/themes/weetjes-v2`
-1. Add version 2.1 of the SkyDreams weetjes-v2 theme to the new WordPress installation:
-	* You can find our theme in the [https://github.com/SkyDreams/wordpress-theme-weetjes-v2/tree/2.1](https://github.com/SkyDreams/wordpress-theme-weetjes-v2/tree/2.1) repository
-	* Clone or copy paste this theme to `vagrant-local/www/wordpress-skydreams/htdocs/wp-content/themes/wordpress-theme-weetjes-v2.1`
-1. Update Weetjes plugins
-    * Extract plugins_homedeal.zip from `\\srv-fs01\it\Dev-DBs\` in the `vagrant-local/www/wordpress-skydreams/htdocs/wp-content/plugins` directory
-1. Update Weetjes assets
-    * Extract uploads_weetjes.zip from `\\srv-fs01\it\Dev-DBs\` in the `vagrant-local/www/wordpress-skydreams/htdocs/wp-content/uploads` directory
-1. Add the latest SkyDreams HomeDeal theme to the new WordPress installation:
-	* You can find our theme in the [https://github.com/SkyDreams/wordpress-theme-homedeal](https://github.com/SkyDreams/wordpress-theme-homedeal) repository
-	* Clone or copy paste this theme to `vagrant-local/www/wordpress-homedeal/htdocs/wp-content/themes/homedeal`
-1. Update HomeDeal plugins
-    * Extract plugins_homedeal.zip from `\\srv-fs01\it\Dev-DBs\` in the `vagrant-local/www/wordpress-homedeal/htdocs/wp-content/plugins` directory
-1. Update HomeDeal assets
-    * Extract uploads_homedeal.zip from `\\srv-fs01\it\Dev-DBs\` in the `vagrant-local/www/wordpress-homedeal/htdocs/wp-content/uploads` directory
 1. Visit any of the following default sites in your browser (admin credentials skydev:skydev):
 	* [http://vvv.dev/](http://vvv.dev/) for a default dashboard containing several useful tools and a site overview
     * [http://wordpress.skydreams.com.dev/](http://wordpress.skydreams.com.dev/) for the weetjes network site
