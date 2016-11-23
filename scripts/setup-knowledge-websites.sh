@@ -34,10 +34,8 @@ PHP
 	cp /vagrant/www/wordpress-skydreams/sunrise.php /vagrant/www/wordpress-skydreams/htdocs/wp-content/sunrise.php
 fi
 
-if ! $(wp core is-installed --network); then
+if ! $(wp core is-installed --network --allow-root); then
 	( exec "/vagrant/scripts/wordpress-skydreams/import-db.sh" )
 	( exec "/vagrant/scripts/wordpress-skydreams/import-plugins.sh" )
 	( exec "/vagrant/scripts/wordpress-skydreams/import-uploads.sh" )
 fi
-
-cd -

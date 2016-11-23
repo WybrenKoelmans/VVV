@@ -31,7 +31,7 @@ PHP
 	cp /vagrant/www/wordpress-homedeal/sunrise.php /vagrant/www/wordpress-homedeal/htdocs/wp-content/sunrise.php
 fi
 
-if ! $(wp core is-installed --network); then
+if ! $(wp core is-installed --network --allow-root); then
 	( exec "/vagrant/scripts/wordpress-homedeal/import-db.sh" )
     ( exec "/vagrant/scripts/wordpress-homedeal/import-plugins.sh" )
     ( exec "/vagrant/scripts/wordpress-homedeal/import-uploads.sh" )
