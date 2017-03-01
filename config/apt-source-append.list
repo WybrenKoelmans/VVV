@@ -12,3 +12,7 @@ deb-src http://ppa.launchpad.net/ondrej/php/ubuntu trusty main
 # Provides Node.js
 deb https://deb.nodesource.com/node_6.x trusty main
 deb-src https://deb.nodesource.com/node_6.x trusty main
+
+# Provides MySQL 5.7
+deb http://ppa.launchpad.net/ondrej/mysql-5.7/ubuntu trusty main
+deb-src http://ppa.launchpad.net/ondrej/mysql-5.7/ubuntu trusty main
