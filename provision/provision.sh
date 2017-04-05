@@ -61,7 +61,8 @@ apt_package_check_list=(
   memcached
 
   # mysql is the default database
-  mysql-server
+  # version 5.6 required for collation utf8mb4_unicode_520_ci support
+  mysql-server-5.6
 
   # other packages that come in handy
   imagemagick
