@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "Import HomeDeal Uploads"
+echo "Import HomeDeal Uploads (this might take a while)"
 
 if [ ! -f /vagrant/wordpress_homedeal_uploads.tar.gz ]; then
     echo "wordpress_homedeal_uploads.tar.gz can't be found. Please add this file (see docs) and provision again!"
