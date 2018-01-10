@@ -297,12 +297,12 @@ tools_install() {
     echo -e "\nDownloading nvm, see https://github.com/creationix/nvm"
     git clone "https://github.com/creationix/nvm.git" "/srv/config/nvm"
     cd /srv/config/nvm
-    git checkout `git describe --abbrev=0 --tags`
+    git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" origin`
   else
     echo -e "\nUpdating nvm..."
     cd /srv/config/nvm
-    git pull origin master
-    git checkout `git describe --abbrev=0 --tags`
+    git fetch origin
+    git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" origin` -q
   fi
   # Activate nvm
   source /srv/config/nvm/nvm.sh
@@ -347,7 +347,7 @@ tools_install() {
   if [[ -n "$(composer --version --no-ansi | grep 'Composer version')" ]]; then
     echo "Updating Composer..."
     COMPOSER_HOME=/usr/local/src/composer composer --no-ansi self-update --no-progress --no-interaction
-    COMPOSER_HOME=/usr/local/src/composer composer --no-ansi global require --no-update --no-progress --no-interaction phpunit/phpunit:5.*
+    COMPOSER_HOME=/usr/local/src/composer composer --no-ansi global require --no-update --no-progress --no-interaction phpunit/phpunit:6.*
     COMPOSER_HOME=/usr/local/src/composer composer --no-ansi global require --no-update --no-progress --no-interaction phpunit/php-invoker:1.1.*
     COMPOSER_HOME=/usr/local/src/composer composer --no-ansi global require --no-update --no-progress --no-interaction mockery/mockery:0.9.*
     COMPOSER_HOME=/usr/local/src/composer composer --no-ansi global require --no-update --no-progress --no-interaction d11wtq/boris:v1.0.8
@@ -463,8 +463,9 @@ phpfpm_setup() {
 
   # Copy memcached configuration from local
   cp "/srv/config/memcached-config/memcached.conf" "/etc/memcached.conf"
+  cp "/srv/config/memcached-config/memcached.conf" "/etc/memcached_default.conf"
 
-  echo " * Copied /srv/config/memcached-config/memcached.conf   to /etc/memcached.conf"
+  echo " * Copied /srv/config/memcached-config/memcached.conf to /etc/memcached.conf and /etc/memcached_default.conf"
 }
 
 mysql_setup() {
@@ -584,7 +585,8 @@ services_restart() {
   # Enable PHP mailcatcher sendmail settings by default
   phpenmod mailcatcher
 
-  service php7.0-fpm restart
+  # Restart all php-fpm versions
+  find /etc/init.d/ -name "php*-fpm" -exec bash -c 'sudo service "$(basename "$0")" restart' {} \;
 
   # Add the vagrant user to the www-data group so that it has better access
   # to PHP and Nginx related files.
