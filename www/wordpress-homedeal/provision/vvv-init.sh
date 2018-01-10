@@ -15,5 +15,5 @@ if ! $(wp core is-installed --network --allow-root --path=${VVV_PATH_TO_SITE}/ht
 	( exec "/vagrant/scripts/wordpress-homedeal/install-wordpress.sh" )
 	( exec "/vagrant/scripts/wordpress-homedeal/import-db.sh" )
     ( exec "/vagrant/scripts/wordpress-homedeal/import-plugins.sh" )
-#    ( exec "/vagrant/scripts/wordpress-homedeal/import-uploads.sh" )
+    ( exec "/vagrant/scripts/wordpress-homedeal/import-uploads.sh" )
 fi

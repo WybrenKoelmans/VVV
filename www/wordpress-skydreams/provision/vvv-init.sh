@@ -15,5 +15,5 @@ if ! $(wp core is-installed --network --allow-root --path=${VVV_PATH_TO_SITE}/ht
 	( exec "/vagrant/scripts/wordpress-skydreams/install-wordpress.sh" )
 	( exec "/vagrant/scripts/wordpress-skydreams/import-db.sh" )
 	( exec "/vagrant/scripts/wordpress-skydreams/import-plugins.sh" )
-#	( exec "/vagrant/scripts/wordpress-skydreams/import-uploads.sh" )
+	( exec "/vagrant/scripts/wordpress-skydreams/import-uploads.sh" )
 fi
