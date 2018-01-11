@@ -5,17 +5,17 @@ This repository contains the WordPress environment setup for 2 WordPress network
 * homedeal (used for all homedeal websites)
 
 # Getting started
-1. Import Database, plugins and file uploads.   
+1. **Before running vagrant up**: Import Database, plugins and file uploads.   
    * Copy the latest WordPress export files from Google Drive File Stream (G:\Team Drives\Team IT\WordPress export) to the root directory (vagrant-local) of this repository.
    These files contain all the plugins, file uploads and other data that are used on production.
 1. Install Wordpress Themes
-   * Run ./scripts/install-themes.sh on your host machine. This script will clone the required themes in the correct directories
+   * Open a bash shell on the host, such as 'Git Bash' and run ./scripts/install-themes.sh from the repository root. This script will clone the required themes in the correct directories
 1. Configure VVV Dashboard (optional)
    * Add this entry to your host file if you want to have access to the VVV dashboard. It gives you an overview of all the available WordPress domains.
       ```
       192.168.50.4  vvv.test
       ```
-1. Provision your VM (`vagrant provision`)
+1. Provisioning is done run on creation (`vagrant up`)
 
 # Varying Vagrant Vagrants
 
