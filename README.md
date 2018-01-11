@@ -1,6 +1,21 @@
-### This repository is modified by SkyDreams. Follow all [steps](#installation---the-first-vagrant-up) below.
-***
+### This repository is a private fork of [Varying Vagrant Vagrants](https://github.com/Varying-Vagrant-Vagrants/VVV)
 
+This repository contains the WordPress environment setup for 2 wordpress networks
+* wordpress-skydreams (used for all SEO knowledge websites and sea/seo combi sites)
+* homedeal (used for all homedeal websites)
+
+# Getting started
+1. Import Database, plugins and file uploads.   
+   * Copy the latest WordPress export files from Google Drive File Stream (G:\Team Drives\Team IT\WordPress export) to the root directory (vagrant-local) of this repository.
+   These files contain all the plugins, file uploads and other data that are used on production.
+1. Install Wordpress Themes
+   * Run ./scripts/install-themes.sh on your host machine. This script will clone the required themes in the correct directories
+1. Configure VVV Dashboard (optional)
+   * Add this entry to your host file if you want to have access to the VVV dashboard. It gives you an overview of all the available WordPress domains.
+      ```
+      192.168.50.4  vvv.test
+      ```
+1. Provision your VM (`vagrant provision`)
 
 # Varying Vagrant Vagrants
 
