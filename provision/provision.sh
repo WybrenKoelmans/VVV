@@ -24,6 +24,8 @@ apt_package_install_list=()
 # virtual machine. We'll then loop through each of these and check individual
 # status before adding them to the apt_package_install_list array.
 apt_package_check_list=(
+  # Please avoid apostrophes in these comments - they break vim syntax
+  # highlighting.
 
   # PHP7
   #
@@ -38,9 +40,12 @@ apt_package_check_list=(
   php7.0-dev
 
   # Extra PHP modules that we find useful
+  php-pear
   php-imagick
   php-memcache
-  php-pear
+  php-memcached
+  php-ssh2
+  php-xdebug
   php7.0-bcmath
   php7.0-curl
   php7.0-gd
@@ -50,7 +55,6 @@ apt_package_check_list=(
   php7.0-imap
   php7.0-json
   php7.0-soap
-  php7.0-ssh2
   php7.0-xml
   php7.0-zip
 
@@ -60,9 +64,8 @@ apt_package_check_list=(
   # memcached is made available for object caching
   memcached
 
-  # mysql is the default database
-  # version 5.6 required for collation utf8mb4_unicode_520_ci support
-  mysql-server-5.6
+  # mariadb (drop-in replacement on mysql) is the default database
+  mariadb-server
 
   # other packages that come in handy
   imagemagick
@@ -76,26 +79,27 @@ apt_package_check_list=(
   vim
   colordiff
   postfix
+  python-pip
 
   # ntp service to keep clock current
   ntp
 
-  # Req'd for i18n tools
+  # Required for i18n tools
   gettext
 
-  # Req'd for Webgrind
+  # Required for Webgrind
   graphviz
 
   # dos2unix
-  # Allows conversion of DOS style line endings to something we'll have less
-  # trouble with in Linux.
+  # Allows conversion of DOS style line endings to something less troublesome
+  # in Linux.
   dos2unix
 
   # nodejs for use by grunt
   g++
   nodejs
 
-  #Mailcatcher requirement
+  # Mailcatcher requirement
   libsqlite3-dev
 
 )
@@ -108,7 +112,7 @@ network_detection() {
   # Make an HTTP request to google.com to determine if outside access is available
   # to us. If 3 attempts with a timeout of 5 seconds are not successful, then we'll
   # skip a few things further in provisioning rather than create a bunch of errors.
-  if [[ "$(wget --tries=3 --timeout=5 --spider http://google.com 2>&1 | grep 'connected')" ]]; then
+  if [[ "$(wget --tries=3 --timeout=5 --spider --recursive --level=2 http://google.com 2>&1 | grep 'connected')" ]]; then
     echo "Network connection detected..."
     ping_result="Connected"
   else
@@ -155,6 +159,7 @@ profile_setup() {
   fi
 
   cp "/srv/config/subversion-servers" "/home/vagrant/.subversion/servers"
+  cp "/srv/config/subversion-config" "/home/vagrant/.subversion/config"
 
   if [[ ! -d "/home/vagrant/bin" ]]; then
     mkdir "/home/vagrant/bin"
@@ -166,6 +171,7 @@ profile_setup() {
   echo " * Copied /srv/config/bash_aliases                      to /home/vagrant/.bash_aliases"
   echo " * Copied /srv/config/vimrc                             to /home/vagrant/.vimrc"
   echo " * Copied /srv/config/subversion-servers                to /home/vagrant/.subversion/servers"
+  echo " * Copied /srv/config/subversion-config                 to /home/vagrant/.subversion/config"
   echo " * rsync'd /srv/config/homebin                          to /home/vagrant/bin"
 
   # If a bash_prompt file exists in the VVV config/ directory, copy to the VM.
@@ -218,13 +224,13 @@ package_check() {
 package_install() {
   package_check
 
-  # MySQL
+  # MariaDB/MySQL
   #
-  # Use debconf-set-selections to specify the default password for the root MySQL
-  # account. This runs on every provision, even if MySQL has been installed. If
-  # MySQL is already installed, it will not affect anything.
-  echo mysql-server mysql-server/root_password password "root" | debconf-set-selections
-  echo mysql-server mysql-server/root_password_again password "root" | debconf-set-selections
+  # Use debconf-set-selections to specify the default password for the root MariaDB
+  # account. This runs on every provision, even if MariaDB has been installed. If
+  # MariaDB is already installed, it will not affect anything.
+  echo mariadb-server-10.1 mysql-server/root_password password "root" | debconf-set-selections
+  echo mariadb-server-10.1 mysql-server/root_password_again password "root" | debconf-set-selections
 
   # Postfix
   #
@@ -234,9 +240,6 @@ package_install() {
   # able to send mail, even with postfix installed.
   echo postfix postfix/main_mailer_type select Internet Site | debconf-set-selections
   echo postfix postfix/mailname string vvv | debconf-set-selections
-
-  # Disable ipv6 as some ISPs/mail servers have problems with it
-  echo "inet_protocols = ipv4" >> "/etc/postfix/main.cf"
 
   # Provide our custom apt sources before running `apt-get update`
   ln -sf /srv/config/apt-source-append.list /etc/apt/sources.list.d/vvv-sources.list
@@ -260,8 +263,13 @@ package_install() {
     wget --quiet "http://nginx.org/keys/nginx_signing.key" -O- | apt-key add -
 
     # Apply the PHP signing key
+    echo "Applying the PHP signing key..."
     apt-key adv --quiet --keyserver "hkp://keyserver.ubuntu.com:80" --recv-key E5267A6C 2>&1 | grep "gpg:"
     apt-key export E5267A6C | apt-key add -
+
+    # Apply the MariaDB signing key
+    echo "Applying the MariaDB signing key..."
+    apt-key adv --quiet --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
 
     # Update all of the package references before installing anything
     echo "Running apt-get update..."
@@ -289,12 +297,12 @@ tools_install() {
     echo -e "\nDownloading nvm, see https://github.com/creationix/nvm"
     git clone "https://github.com/creationix/nvm.git" "/srv/config/nvm"
     cd /srv/config/nvm
-    git checkout `git describe --abbrev=0 --tags`
+    git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" origin`
   else
     echo -e "\nUpdating nvm..."
     cd /srv/config/nvm
-    git pull origin master
-    git checkout `git describe --abbrev=0 --tags`
+    git fetch origin
+    git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" origin` -q
   fi
   # Activate nvm
   source /srv/config/nvm/nvm.sh
@@ -302,35 +310,10 @@ tools_install() {
   # npm
   #
   # Make sure we have the latest npm version and the update checker module
+  echo "Installing/updating npm..."
   npm install -g npm
+  echo "Installing/updating npm-check-updates..."
   npm install -g npm-check-updates
-
-  # Xdebug
-  #
-  # The version of Xdebug 2.4.0 that is available for our Ubuntu installation
-  # is not compatible with PHP 7.0. We instead retrieve the source package and
-  # go through the manual installation steps.
-  if [[ -f /usr/lib/php/20151012/xdebug.so ]]; then
-      echo "Xdebug already installed"
-  else
-      echo "Installing Xdebug"
-      # Download and extract Xdebug.
-      curl -L -O --silent https://xdebug.org/files/xdebug-2.4.0.tgz
-      tar -xf xdebug-2.4.0.tgz
-      cd xdebug-2.4.0
-      # Create a build environment for Xdebug based on our PHP configuration.
-      phpize
-      # Complete configuration of the Xdebug build.
-      ./configure -q
-      # Build the Xdebug module for use with PHP.
-      make -s > /dev/null
-      # Install the module.
-      cp modules/xdebug.so /usr/lib/php/20151012/xdebug.so
-      # Clean up.
-      cd ..
-      rm -rf xdebug-2.4.0*
-      echo "Xdebug installed"
-  fi
 
   # ack-grep
   #
@@ -340,7 +323,7 @@ tools_install() {
     echo "ack-grep already installed"
   else
     echo "Installing ack-grep as ack"
-    curl -s http://beyondgrep.com/ack-2.14-single-file > "/usr/bin/ack" && chmod +x "/usr/bin/ack"
+    curl -s https://beyondgrep.com/ack-2.16-single-file > "/usr/bin/ack" && chmod +x "/usr/bin/ack"
   fi
 
   # COMPOSER
@@ -363,32 +346,50 @@ tools_install() {
   # the master branch on its GitHub repository.
   if [[ -n "$(composer --version --no-ansi | grep 'Composer version')" ]]; then
     echo "Updating Composer..."
-    COMPOSER_HOME=/usr/local/src/composer composer self-update
-    COMPOSER_HOME=/usr/local/src/composer composer -q global require --no-update phpunit/phpunit:5.*
-    COMPOSER_HOME=/usr/local/src/composer composer -q global require --no-update phpunit/php-invoker:1.1.*
-    COMPOSER_HOME=/usr/local/src/composer composer -q global require --no-update mockery/mockery:0.9.*
-    COMPOSER_HOME=/usr/local/src/composer composer -q global require --no-update d11wtq/boris:v1.0.8
-    COMPOSER_HOME=/usr/local/src/composer composer -q global config bin-dir /usr/local/bin
-    COMPOSER_HOME=/usr/local/src/composer composer global update
+    COMPOSER_HOME=/usr/local/src/composer composer --no-ansi self-update --no-progress --no-interaction
+    COMPOSER_HOME=/usr/local/src/composer composer --no-ansi global require --no-update --no-progress --no-interaction phpunit/phpunit:6.*
+    COMPOSER_HOME=/usr/local/src/composer composer --no-ansi global require --no-update --no-progress --no-interaction phpunit/php-invoker:1.1.*
+    COMPOSER_HOME=/usr/local/src/composer composer --no-ansi global require --no-update --no-progress --no-interaction mockery/mockery:0.9.*
+    COMPOSER_HOME=/usr/local/src/composer composer --no-ansi global require --no-update --no-progress --no-interaction d11wtq/boris:v1.0.8
+    COMPOSER_HOME=/usr/local/src/composer composer --no-ansi global config bin-dir /usr/local/bin
+    COMPOSER_HOME=/usr/local/src/composer composer --no-ansi global update --no-progress --no-interaction
   fi
 
   # Grunt
   #
   # Install or Update Grunt based on current state.  Updates are direct
   # from NPM
+  function hack_avoid_gyp_errors() {
+    # Without this, we get a bunch of errors when installing `grunt-sass`:
+    # > node scripts/install.js
+    # Unable to save binary /usr/lib/node_modules/.../node-sass/.../linux-x64-48 :
+    # { Error: EACCES: permission denied, mkdir '/usr/lib/node_modules/... }
+    # Then, node-gyp generates tons of errors like:
+    # WARN EACCES user "root" does not have permission to access the dev dir
+    # "/usr/lib/node_modules/grunt-sass/node_modules/node-sass/.node-gyp/6.11.2"
+    # TODO: Why do child processes of `npm` run as `nobody`?
+    while [ ! -f /tmp/stop_gyp_hack ]; do
+      if [ -d /usr/lib/node_modules/grunt-sass/ ]; then
+        chown -R nobody:vagrant /usr/lib/node_modules/grunt-sass/
+      fi
+      sleep .2
+    done
+    rm /tmp/stop_gyp_hack
+  }
   if [[ "$(grunt --version)" ]]; then
     echo "Updating Grunt CLI"
-    npm update -g grunt-cli &>/dev/null
-    npm update -g grunt-sass &>/dev/null
-    npm update -g grunt-cssjanus &>/dev/null
-    npm update -g grunt-rtlcss &>/dev/null
+    npm update -g grunt-cli
+    hack_avoid_gyp_errors & npm update -g grunt-sass; touch /tmp/stop_gyp_hack
+    npm update -g grunt-cssjanus
+    npm update -g grunt-rtlcss
   else
     echo "Installing Grunt CLI"
-    npm install -g grunt-cli &>/dev/null
-    npm install -g grunt-sass &>/dev/null
-    npm install -g grunt-cssjanus &>/dev/null
-    npm install -g grunt-rtlcss &>/dev/null
+    npm install -g grunt-cli
+    hack_avoid_gyp_errors & npm install -g grunt-sass; touch /tmp/stop_gyp_hack
+    npm install -g grunt-cssjanus
+    npm install -g grunt-rtlcss
   fi
+  chown -R vagrant:vagrant /usr/lib/node_modules/
 
   # Graphviz
   #
@@ -396,22 +397,28 @@ tools_install() {
   # config and actual path.
   echo "Adding graphviz symlink for Webgrind..."
   ln -sf "/usr/bin/dot" "/usr/local/bin/dot"
+
+  # Shyaml
+  #
+  # Used for passing custom parameters to the bash provisioning scripts
+  echo "Installing Shyaml for bash provisioning.."
+  sudo pip install shyaml
 }
 
 nginx_setup() {
   # Create an SSL key and certificate for HTTPS support.
-  if [[ ! -e /etc/nginx/server.key ]]; then
+  if [[ ! -e /etc/nginx/server-2.1.0.key ]]; then
 	  echo "Generate Nginx server private key..."
-	  vvvgenrsa="$(openssl genrsa -out /etc/nginx/server.key 2048 2>&1)"
+	  vvvgenrsa="$(openssl genrsa -out /etc/nginx/server-2.1.0.key 2048 2>&1)"
 	  echo "$vvvgenrsa"
   fi
-  if [[ ! -e /etc/nginx/server.crt ]]; then
+  if [[ ! -e /etc/nginx/server-2.1.0.crt ]]; then
 	  echo "Sign the certificate using the above private key..."
 	  vvvsigncert="$(openssl req -new -x509 \
-            -key /etc/nginx/server.key \
-            -out /etc/nginx/server.crt \
+            -key /etc/nginx/server-2.1.0.key \
+            -out /etc/nginx/server-2.1.0.crt \
             -days 3650 \
-            -subj /CN=*.wordpress-develop.dev/CN=*.wordpress.dev/CN=*.vvv.dev 2>&1)"
+            -subj /CN=*.wordpress-develop.test/CN=*.wordpress.test/CN=*.wordpress-develop.dev/CN=*.wordpress.dev/CN=*.vvv.dev/CN=*.vvv.local/CN=*.vvv.localhost/CN=*.vvv.test 2>&1)"
 	  echo "$vvvsigncert"
   fi
 
@@ -424,6 +431,12 @@ nginx_setup() {
   # Copy nginx configuration from local
   cp "/srv/config/nginx-config/nginx.conf" "/etc/nginx/nginx.conf"
   cp "/srv/config/nginx-config/nginx-wp-common.conf" "/etc/nginx/nginx-wp-common.conf"
+
+  if [[ ! -d "/etc/nginx/upstreams" ]]; then
+    mkdir "/etc/nginx/upstreams/"
+  fi
+  cp "/srv/config/nginx-config/php7.0-upstream.conf" "/etc/nginx/upstreams/php70.conf"
+
   if [[ ! -d "/etc/nginx/custom-sites" ]]; then
     mkdir "/etc/nginx/custom-sites/"
   fi
@@ -436,30 +449,27 @@ nginx_setup() {
 
 phpfpm_setup() {
   # Copy php-fpm configuration from local
-  cp "/srv/config/php-config/php7-fpm.conf" "/etc/php/7.0/fpm/php-fpm.conf"
-  cp "/srv/config/php-config/www.conf" "/etc/php/7.0/fpm/pool.d/www.conf"
-  cp "/srv/config/php-config/php-custom.ini" "/etc/php/7.0/fpm/conf.d/php-custom.ini"
+  cp "/srv/config/php-config/php7.0-fpm.conf" "/etc/php/7.0/fpm/php-fpm.conf"
+  cp "/srv/config/php-config/php7.0-www.conf" "/etc/php/7.0/fpm/pool.d/www.conf"
+  cp "/srv/config/php-config/php7.0-custom.ini" "/etc/php/7.0/fpm/conf.d/php-custom.ini"
   cp "/srv/config/php-config/opcache.ini" "/etc/php/7.0/fpm/conf.d/opcache.ini"
   cp "/srv/config/php-config/xdebug.ini" "/etc/php/7.0/mods-available/xdebug.ini"
 
-  # Find the path to Xdebug and prepend it to xdebug.ini
-  XDEBUG_PATH=$( find /usr/lib/php/ -name 'xdebug.so' | head -1 )
-  sed -i "1izend_extension=\"$XDEBUG_PATH\"" "/etc/php/7.0/mods-available/xdebug.ini"
-
-  echo " * Copied /srv/config/php-config/php7-fpm.conf     to /etc/php/7.0/fpm/php-fpm.conf"
-  echo " * Copied /srv/config/php-config/www.conf          to /etc/php/7.0/fpm/pool.d/www.conf"
-  echo " * Copied /srv/config/php-config/php-custom.ini    to /etc/php/7.0/fpm/conf.d/php-custom.ini"
+  echo " * Copied /srv/config/php-config/php7.0-fpm.conf   to /etc/php/7.0/fpm/php-fpm.conf"
+  echo " * Copied /srv/config/php-config/php7.0-www.conf   to /etc/php/7.0/fpm/pool.d/www.conf"
+  echo " * Copied /srv/config/php-config/php7.0-custom.ini to /etc/php/7.0/fpm/conf.d/php-custom.ini"
   echo " * Copied /srv/config/php-config/opcache.ini       to /etc/php/7.0/fpm/conf.d/opcache.ini"
   echo " * Copied /srv/config/php-config/xdebug.ini        to /etc/php/7.0/mods-available/xdebug.ini"
 
   # Copy memcached configuration from local
   cp "/srv/config/memcached-config/memcached.conf" "/etc/memcached.conf"
+  cp "/srv/config/memcached-config/memcached.conf" "/etc/memcached_default.conf"
 
-  echo " * Copied /srv/config/memcached-config/memcached.conf   to /etc/memcached.conf"
+  echo " * Copied /srv/config/memcached-config/memcached.conf to /etc/memcached.conf and /etc/memcached_default.conf"
 }
 
 mysql_setup() {
-  # If MySQL is installed, go through the various imports and service tasks.
+  # If MariaDB/MySQL is installed, go through the various imports and service tasks.
   local exists_mysql
 
   exists_mysql="$(service mysql status)"
@@ -528,7 +538,7 @@ mailcatcher_setup() {
     gpg -q --no-tty --batch --keyserver "hkp://keyserver.ubuntu.com:80" --recv-keys BF04FF17
 
     printf " * RVM [not installed]\n Installing from source"
-    curl --silent -L "https://get.rvm.io" | sudo bash -s stable --ruby
+    curl --silent -L "https://raw.githubusercontent.com/rvm/rvm/stable/binscripts/rvm-installer" | sudo bash -s stable --ruby --quiet-curl
     source "/usr/local/rvm/scripts/rvm"
   fi
 
@@ -575,7 +585,8 @@ services_restart() {
   # Enable PHP mailcatcher sendmail settings by default
   phpenmod mailcatcher
 
-  service php7.0-fpm restart
+  # Restart all php-fpm versions
+  find /etc/init.d/ -name "php*-fpm" -exec bash -c 'sudo service "$(basename "$0")" restart' {} \;
 
   # Add the vagrant user to the www-data group so that it has better access
   # to PHP and Nginx related files.
@@ -584,271 +595,77 @@ services_restart() {
 
 wp_cli() {
   # WP-CLI Install
-  if [[ ! -d "/srv/www/wp-cli" ]]; then
+  local exists_wpcli
+
+  # Remove old wp-cli symlink, if it exists.
+  if [[ -L "/usr/local/bin/wp" ]]; then
+    echo "\nRemoving old wp-cli"
+    rm -f /usr/local/bin/wp
+  fi
+
+  exists_wpcli="$(which wp)"
+  if [[ "/usr/local/bin/wp" != "${exists_wpcli}" ]]; then
     echo -e "\nDownloading wp-cli, see http://wp-cli.org"
-    git clone "https://github.com/wp-cli/wp-cli.git" "/srv/www/wp-cli"
-    cd /srv/www/wp-cli
-    composer install
+    curl -sO https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli-nightly.phar
+    chmod +x wp-cli-nightly.phar
+    sudo mv wp-cli-nightly.phar /usr/local/bin/wp
+
+    # Install bash completions
+    curl -s https://raw.githubusercontent.com/wp-cli/wp-cli/master/utils/wp-completion.bash -o /srv/config/wp-cli/wp-completion.bash
   else
     echo -e "\nUpdating wp-cli..."
-    cd /srv/www/wp-cli
-    git pull --rebase origin master
-    composer update
-  fi
-  # Link `wp` to the `/usr/local/bin` directory
-  ln -sf "/srv/www/wp-cli/bin/wp" "/usr/local/bin/wp"
-}
-
-memcached_admin() {
-  # Download and extract phpMemcachedAdmin to provide a dashboard view and
-  # admin interface to the goings on of memcached when running
-  if [[ ! -d "/srv/www/default/memcached-admin" ]]; then
-    echo -e "\nDownloading phpMemcachedAdmin, see https://github.com/wp-cloud/phpmemcacheadmin"
-    cd /srv/www/default
-    wget -q -O phpmemcachedadmin.tar.gz "https://github.com/wp-cloud/phpmemcacheadmin/archive/1.2.2.1.tar.gz"
-    tar -xf phpmemcachedadmin.tar.gz
-    mv phpmemcacheadmin* memcached-admin
-    rm phpmemcachedadmin.tar.gz
-  else
-    echo "phpMemcachedAdmin already installed."
-  fi
-}
-
-opcached_status(){
-  # Checkout Opcache Status to provide a dashboard for viewing statistics
-  # about PHP's built in opcache.
-  if [[ ! -d "/srv/www/default/opcache-status" ]]; then
-    echo -e "\nDownloading Opcache Status, see https://github.com/rlerdorf/opcache-status/"
-    cd /srv/www/default
-    git clone "https://github.com/rlerdorf/opcache-status.git" opcache-status
-  else
-    echo -e "\nUpdating Opcache Status"
-    cd /srv/www/default/opcache-status
-    git pull --rebase origin master
-  fi
-}
-
-webgrind_install() {
-  # Webgrind install (for viewing callgrind/cachegrind files produced by
-  # xdebug profiler)
-  if [[ ! -d "/srv/www/default/webgrind" ]]; then
-    echo -e "\nDownloading webgrind, see https://github.com/michaelschiller/webgrind.git"
-    git clone "https://github.com/michaelschiller/webgrind.git" "/srv/www/default/webgrind"
-  else
-    echo -e "\nUpdating webgrind..."
-    cd /srv/www/default/webgrind
-    git pull --rebase origin master
+    wp --allow-root cli update --nightly --yes
   fi
 }
 
 php_codesniff() {
   # PHP_CodeSniffer (for running WordPress-Coding-Standards)
-  if [[ ! -d "/srv/www/phpcs" ]]; then
-    echo -e "\nDownloading PHP_CodeSniffer (phpcs), see https://github.com/squizlabs/PHP_CodeSniffer"
-    git clone -b master "https://github.com/squizlabs/PHP_CodeSniffer.git" "/srv/www/phpcs"
-  else
-    cd /srv/www/phpcs
-    if [[ $(git rev-parse --abbrev-ref HEAD) == 'master' ]]; then
-      echo -e "\nUpdating PHP_CodeSniffer (phpcs)..."
-      git pull --no-edit origin master
-    else
-      echo -e "\nSkipped updating PHP_CodeSniffer since not on master branch"
-    fi
-  fi
+  # Sniffs WordPress Coding Standards
+  echo -e "\nInstall/Update PHP_CodeSniffer (phpcs), see https://github.com/squizlabs/PHP_CodeSniffer"
+  echo -e "\nInstall/Update WordPress-Coding-Standards, sniffs for PHP_CodeSniffer, see https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards"
+  cd /vagrant/provision/phpcs
+  composer update --no-ansi --no-autoloader
 
   # Link `phpcbf` and `phpcs` to the `/usr/local/bin` directory
-  ln -sf "/srv/www/phpcs/scripts/phpcbf" "/usr/local/bin/phpcbf"
-  ln -sf "/srv/www/phpcs/scripts/phpcs" "/usr/local/bin/phpcs"
-
-  # Sniffs WordPress Coding Standards
-  if [[ ! -d "/srv/www/phpcs/CodeSniffer/Standards/WordPress" ]]; then
-    echo -e "\nDownloading WordPress-Coding-Standards, sniffs for PHP_CodeSniffer, see https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards"
-    git clone -b master "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git" "/srv/www/phpcs/CodeSniffer/Standards/WordPress"
-  else
-    cd /srv/www/phpcs/CodeSniffer/Standards/WordPress
-    if [[ $(git rev-parse --abbrev-ref HEAD) == 'master' ]]; then
-      echo -e "\nUpdating PHP_CodeSniffer WordPress Coding Standards..."
-      git pull --no-edit origin master
-    else
-      echo -e "\nSkipped updating PHPCS WordPress Coding Standards since not on master branch"
-    fi
-  fi
+  ln -sf "/srv/www/phpcs/bin/phpcbf" "/usr/local/bin/phpcbf"
+  ln -sf "/srv/www/phpcs/bin/phpcs" "/usr/local/bin/phpcs"
 
   # Install the standards in PHPCS
-  phpcs --config-set installed_paths ./CodeSniffer/Standards/WordPress/
+  phpcs --config-set installed_paths ./CodeSniffer/Standards/WordPress/,./CodeSniffer/Standards/VIP-Coding-Standards/
   phpcs --config-set default_standard WordPress-Core
   phpcs -i
 }
 
-phpmyadmin_setup() {
-  # Download phpMyAdmin
-  if [[ ! -d /srv/www/default/database-admin ]]; then
-    echo "Downloading phpMyAdmin..."
-    cd /srv/www/default
-    wget -q -O phpmyadmin.tar.gz "https://files.phpmyadmin.net/phpMyAdmin/4.6.0/phpMyAdmin-4.6.0-all-languages.tar.gz"
-    tar -xf phpmyadmin.tar.gz
-    mv phpMyAdmin-4.6.0-all-languages database-admin
-    rm phpmyadmin.tar.gz
-  else
-    echo "PHPMyAdmin already installed."
-  fi
-  cp "/srv/config/phpmyadmin-config/config.inc.php" "/srv/www/default/database-admin/"
-}
-
-wordpress_default() {
-  # Install and configure the latest stable version of WordPress
-  if [[ ! -d "/srv/www/wordpress-default" ]]; then
-    echo "Downloading WordPress Stable, see http://wordpress.org/"
-    cd /srv/www/
-    curl -L -O "https://wordpress.org/latest.tar.gz"
-    noroot tar -xvf latest.tar.gz
-    mv wordpress wordpress-default
-    rm latest.tar.gz
-    cd /srv/www/wordpress-default
-    echo "Configuring WordPress Stable..."
-    noroot wp core config --dbname=wordpress_default --dbuser=wp --dbpass=wp --quiet --extra-php <<PHP
-// Match any requests made via xip.io.
-if ( isset( \$_SERVER['HTTP_HOST'] ) && preg_match('/^(local.wordpress.)\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(.xip.io)\z/', \$_SERVER['HTTP_HOST'] ) ) {
-define( 'WP_HOME', 'http://' . \$_SERVER['HTTP_HOST'] );
-define( 'WP_SITEURL', 'http://' . \$_SERVER['HTTP_HOST'] );
-}
-
-define( 'WP_DEBUG', true );
-PHP
-    echo "Installing WordPress Stable..."
-    noroot wp core install --url=local.wordpress.dev --quiet --title="Local WordPress Dev" --admin_name=admin --admin_email="admin@local.dev" --admin_password="password"
-  else
-    echo "Updating WordPress Stable..."
-    cd /srv/www/wordpress-default
-    noroot wp core update
-  fi
-}
-
 wpsvn_check() {
-  # Test to see if an svn upgrade is needed
-  svn_test=$( svn status -u "/srv/www/wordpress-develop/" 2>&1 );
+  # Get all SVN repos.
+  svn_repos=$(find /srv/www -maxdepth 5 -type d -name '.svn');
+
+  # Do we have any?
+  if [[ -n $svn_repos ]]; then
+    for repo in $svn_repos; do
+      # Test to see if an svn upgrade is needed on this repo.
+      svn_test=$( svn status -u "$repo" 2>&1 );
 
   if [[ "$svn_test" == *"svn upgrade"* ]]; then
-  # If the wordpress-develop svn repo needed an upgrade, they probably all need it
-    for repo in $(find /srv/www -maxdepth 5 -type d -name '.svn'); do
+        # If it is needed do it!
       svn upgrade "${repo/%\.svn/}"
+      fi;
     done
   fi;
 }
 
-wordpress_develop(){
-  # Checkout, install and configure WordPress trunk via develop.svn
-  if [[ ! -d "/srv/www/wordpress-develop" ]]; then
-    echo "Checking out WordPress trunk. See https://develop.svn.wordpress.org/trunk"
-    noroot svn checkout "https://develop.svn.wordpress.org/trunk/" "/tmp/wordpress-develop"
-
-    cd /tmp/wordpress-develop/src/
-
-    echo "Installing local npm packages for src.wordpress-develop.dev, this may take several minutes."
-    noroot npm install
-
-    echo "Initializing grunt and creating build.wordpress-develop.dev, this may take several minutes."
-    noroot grunt
-
-    echo "Moving WordPress develop to a shared directory, /srv/www/wordpress-develop"
-    mv /tmp/wordpress-develop /srv/www/
-
-    cd /srv/www/wordpress-develop/src/
-    echo "Creating wp-config.php for src.wordpress-develop.dev and build.wordpress-develop.dev."
-    noroot wp core config --dbname=wordpress_develop --dbuser=wp --dbpass=wp --quiet --extra-php <<PHP
-// Match any requests made via xip.io.
-if ( isset( \$_SERVER['HTTP_HOST'] ) && preg_match('/^(src|build)(.wordpress-develop.)\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(.xip.io)\z/', \$_SERVER['HTTP_HOST'] ) ) {
-define( 'WP_HOME', 'http://' . \$_SERVER['HTTP_HOST'] );
-define( 'WP_SITEURL', 'http://' . \$_SERVER['HTTP_HOST'] );
-} else if ( 'build' === basename( dirname( __FILE__ ) ) ) {
-// Allow (src|build).wordpress-develop.dev to share the same Database
-define( 'WP_HOME', 'http://build.wordpress-develop.dev' );
-define( 'WP_SITEURL', 'http://build.wordpress-develop.dev' );
-}
-
-define( 'WP_DEBUG', true );
-PHP
-    echo "Installing src.wordpress-develop.dev."
-    noroot wp core install --url=src.wordpress-develop.dev --quiet --title="WordPress Develop" --admin_name=admin --admin_email="admin@local.dev" --admin_password="password"
-    cp /srv/config/wordpress-config/wp-tests-config.php /srv/www/wordpress-develop/
-    cd /srv/www/wordpress-develop/
-  else
-    echo "Updating WordPress develop..."
-    cd /srv/www/wordpress-develop/
-    if [[ -e .svn ]]; then
-      svn up
-    else
-      if [[ $(git rev-parse --abbrev-ref HEAD) == 'master' ]]; then
-        git pull --no-edit git://develop.git.wordpress.org/ master
-      else
-        echo "Skip auto git pull on develop.git.wordpress.org since not on master branch"
-      fi
-    fi
-    echo "Updating npm packages..."
-    noroot npm install &>/dev/null
-  fi
-
-  if [[ ! -d "/srv/www/wordpress-develop/build" ]]; then
-    echo "Initializing grunt in WordPress develop... This may take a few moments."
-    cd /srv/www/wordpress-develop/
-    grunt
-  fi
-}
-
-custom_vvv(){
-  # Find new sites to setup.
+cleanup_vvv(){
   # Kill previously symlinked Nginx configs
-  # We can't know what sites have been removed, so we have to remove all
-  # the configs and add them back in again.
   find /etc/nginx/custom-sites -name 'vvv-auto-*.conf' -exec rm {} \;
 
-  # Look for site setup scripts
-  find /srv/www -maxdepth 5 -name 'vvv-init.sh' -print0 | while read -d $'\0' SITE_CONFIG_FILE; do
-    DIR="$(dirname "$SITE_CONFIG_FILE")"
-    (
-    cd "$DIR"
-    source vvv-init.sh
-    )
-  done
-
-  # Look for Nginx vhost files, symlink them into the custom sites dir
-  for SITE_CONFIG_FILE in $(find /srv/www -maxdepth 5 -name 'vvv-nginx.conf'); do
-    DEST_CONFIG_FILE=${SITE_CONFIG_FILE//\/srv\/www\//}
-    DEST_CONFIG_FILE=${DEST_CONFIG_FILE//\//\-}
-    DEST_CONFIG_FILE=${DEST_CONFIG_FILE/%-vvv-nginx.conf/}
-    DEST_CONFIG_FILE="vvv-auto-$DEST_CONFIG_FILE-$(md5sum <<< "$SITE_CONFIG_FILE" | cut -c1-32).conf"
-    # We allow the replacement of the {vvv_path_to_folder} token with
-    # whatever you want, allowing flexible placement of the site folder
-    # while still having an Nginx config which works.
-    DIR="$(dirname "$SITE_CONFIG_FILE")"
-    sed "s#{vvv_path_to_folder}#$DIR#" "$SITE_CONFIG_FILE" > "/etc/nginx/custom-sites/""$DEST_CONFIG_FILE"
-
-    # Resolve relative paths since not supported in Nginx root.
-    while grep -sqE '/[^/][^/]*/\.\.' "/etc/nginx/custom-sites/""$DEST_CONFIG_FILE"; do
-      sed -i 's#/[^/][^/]*/\.\.##g' "/etc/nginx/custom-sites/""$DEST_CONFIG_FILE"
-  done
-  done
-
-  # Parse any vvv-hosts file located in www/ or subdirectories of www/
-  # for domains to be added to the virtual machine's host file so that it is
-  # self aware.
-  #
-  # Domains should be entered on new lines.
+  # Cleanup the hosts file
   echo "Cleaning the virtual machine's /etc/hosts file..."
   sed -n '/# vvv-auto$/!p' /etc/hosts > /tmp/hosts
+  echo "127.0.0.1 vvv.dev # vvv-auto" >> "/etc/hosts"
+  echo "127.0.0.1 vvv.local # vvv-auto" >> "/etc/hosts"
+  echo "127.0.0.1 vvv.localhost # vvv-auto" >> "/etc/hosts"
+  echo "127.0.0.1 vvv.test # vvv-auto" >> "/etc/hosts"
   mv /tmp/hosts /etc/hosts
-  echo "Adding domains to the virtual machine's /etc/hosts file..."
-  find /srv/www/ -maxdepth 5 -name 'vvv-hosts' | \
-  while read hostfile; do
-    while IFS='' read -r line || [ -n "$line" ]; do
-      if [[ "#" != ${line:0:1} ]]; then
-        if [[ -z "$(grep -q "^127.0.0.1 $line$" /etc/hosts)" ]]; then
-          echo "127.0.0.1 $line # vvv-auto" >> "/etc/hosts"
-          echo " * Added $line from $hostfile"
-        fi
-      fi
-    done < "$hostfile"
-  done
 }
 
 ### SCRIPT
@@ -878,29 +695,21 @@ echo " "
 echo "Installing/updating wp-cli and debugging tools"
 
 wp_cli
-memcached_admin
-opcached_status
-webgrind_install
 php_codesniff
-phpmyadmin_setup
 #
 #network_check
 # Time for WordPress!
 echo " "
-#echo "Installing/updating WordPress Stable & Develop"
 
-#wordpress_default
-#wpsvn_check
-#wordpress_develop
+wpsvn_check
 
 # VVV custom site import
 echo " "
-echo "VVV custom site import"
-custom_vvv
+cleanup_vvv
 
 #set +xv
 # And it's done
 end_seconds="$(date +%s)"
 echo "-----------------------------"
 echo "Provisioning complete in "$(( end_seconds - start_seconds ))" seconds"
-echo "For further setup instructions, visit http://vvv.dev"
+echo "For further setup instructions, visit http://vvv.test"

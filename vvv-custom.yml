@@ -1,0 +1,67 @@
+---
+
+# This file is a YAML formatted file. YAML indenting is done in spaces not
+# tabs, and whitespace is significant. If you don't stick to this, it will
+# fail on provision
+
+#
+# IMPORTANT, if you change this file, you have to reprovision,  no exceptions
+# vagrant reload --provision
+#
+
+# These are your websites, and their names map on to the folders they're
+# located in. See the docs for how to define these, and what all the keys
+# and options are
+sites:
+  # The wordpress-default configuration provides a default installation of the
+  # latest version of WordPress.
+  wordpress-homedeal:
+    hosts:
+      - homedeal.com.dev.skydreams.com
+      - homedeal.nl.dev.skydreams.com
+      - homedeal.be.dev.skydreams.com
+
+  wordpress-skydreams:
+    hosts:
+      - wordpress.skydreams.com.dev.skydreams.com
+      - hekwerk-weetjes.nl.dev.skydreams.com
+      - tegelzetter-weetjes.nl.dev.skydreams.com
+      - gevelreiniging-weetjes.nl.dev.skydreams.com
+      - alarmsysteem-weetjes.nl.dev.skydreams.com
+      - verhuisoffertes.com.dev.skydreams.com
+      - isolatie-weetjes.nl.dev.skydreams.com
+      - cvketel-weetjes.nl.dev.skydreams.com
+      - dakdekker-weetjes.nl.dev.skydreams.com
+      - schilder-weetjes.nl.dev.skydreams.com
+      - stucadoor-weetjes.nl.dev.skydreams.com
+      - zonnepanelen-weetjes.nl.dev.skydreams.com
+      - zonwering-weetjes.nl.dev.skydreams.com
+      - rolluiken-weetjes.nl.dev.skydreams.com
+      - kozijnen-weetjes.nl.dev.skydreams.com
+      - dubbelglas-weetjes.nl.dev.skydreams.com
+      - hovenier-weetjes.nl.dev.skydreams.com
+      - dakkapel-weetjes.nl.dev.skydreams.com
+      - schilder-weetjes.be.dev.skydreams.com
+      - ramen-weetjes.be.dev.skydreams.com
+      - dakwerken-weetjes.be.dev.skydreams.com
+      - isolatie-weetjes.be.dev.skydreams.com
+      - zonnepanelen-weetjes.be.dev.skydreams.com
+      - verwarmingsketel-weetjes.be.dev.skydreams.com
+      - tuin-weetjes.be.dev.skydreams.com
+      - infissi365.it.dev.skydreams.com
+      - alarmsystemen-weetjes.be.dev.skydreams.com
+      - pleisterwerken-weetjes.be.dev.skydreams.com
+      - gevelrenovatie-weetjes.be.dev.skydreams.com
+      - pannelli-solari24.it.dev.skydreams.com
+      - getawindow.co.uk.dev.skydreams.com
+      - airco-weetjes.be.dev.skydreams.com
+      - aannemer-weetjes.be.dev.skydreams.com
+      - be.verhuisoffertes.com.dev.skydreams.com
+      - getamover.co.uk.dev.skydreams.com
+      - edilizia365.it.dev.skydreams.com
+      - traslochi24.it.dev.skydreams.com
+      - getagardener.co.uk.dev.skydreams.com
+      - centralheating-quotes.com.dev.skydreams.com
+      - window24.ie.dev.skydreams.com
+      - getamover.ie.dev.skydreams.com
+      - giardinieri-24.it.dev.skydreams.com

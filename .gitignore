@@ -14,6 +14,8 @@
 /provision/provision-pre.sh
 /provision/provision-post.sh
 /provision/github.token
+/provision/resources/
+/provision/phpcs/
 
 # Ignore custom trigger scripts in config/homebin.
 /config/homebin/vagrant_up_custom
@@ -28,10 +30,13 @@
 /config/custom/*
 
 # Ignore the nvm git clone in the 'nvm' directory in config
-/config/nvm/*
+/config/nvm/
 
 # Ignore a custom bash_prompt if it exists
 /config/bash_prompt
+
+# Ignore downloaded wp-cli bash completions
+/config/wp-cli/wp-completion.bash
 
 # No need to share our mysql data with each other
 /database/data/*
@@ -55,26 +60,18 @@
 # And we do have a default SQL file that should be included
 !/database/init.sql
 
+# Allow the dashboard
+!/www/default/dashboard/
+
 # And we provide our default host names in a dat file.
 !/www/vvv-hosts
 
+/www/*
+
 # And a few of our web directories are important to share.
 !/www/default/
+!/www/*/provision
 
-!/www/wordpress-skydreams/
-/www/wordpress-skydreams/htdocs
-
-!/www/wordpress-homedeal/
-/www/wordpress-homedeal/htdocs
-
-!/www/wordpress-homedeal-blog/
-/www/wordpress-homedeal-blog/htdocs
-
-!/www/dashboard/
-
-/www/default/*
-!/www/default/index.php
-!/www/default/vvv-init.sh
 
 # But not the custom phpMyAdmin config in the database-admin directory.
 /www/default/database-admin/config.inc.custom.php

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "Import Weetjes Uploads"
+echo "Importing Weetjes Uploads (this might take a while)"
 
 if [ ! -f /vagrant/wordpress_uploads.tar.gz ]; then
     echo "wordpress_uploads.tar.gz can't be found. Please add this file (see docs) and provision again!"
