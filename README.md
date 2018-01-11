@@ -1,7 +1,7 @@
 ### This repository is a private fork of [Varying Vagrant Vagrants](https://github.com/Varying-Vagrant-Vagrants/VVV)
 
 This repository contains the WordPress environment setup for 2 WordPress networks
-* wordpress-skydreams (used for all SEO knowledge websites and sea/seo combi sites)
+* wordpress-skydreams (used for all SEO knowledge websites and SEA/SEO combi websites)
 * homedeal (used for all homedeal websites)
 
 # Getting started
