@@ -15,7 +15,7 @@ This repository contains the WordPress environment setup for 2 WordPress network
       ```
       192.168.50.4  vvv.test
       ```
-1. Provisioning is done run on creation (`vagrant up`)
+1. Provisioning is run upon creation (`vagrant up`)
 
 # Varying Vagrant Vagrants
 
