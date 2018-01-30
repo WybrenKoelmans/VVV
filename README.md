@@ -9,7 +9,7 @@ This repository contains the WordPress environment setup for 2 WordPress network
    * Copy the latest WordPress export files from Google Drive File Stream (G:\Team Drives\Team IT\WordPress export) to the root directory (vagrant-local) of this repository.
    These files contain all the plugins, file uploads and other data that are used on production.
 1. Install Wordpress Themes
-   * Open a bash shell on the host, such as 'Git Bash' and run ./scripts/install-themes.sh from the repository root. This script will clone the required themes in the correct directories
+   * Open a bash shell **on the host**, such as 'Git Bash' and run ./scripts/install-themes.sh from the repository root. This script will clone the required themes in the correct directories
 1. Configure VVV Dashboard (optional)
    * Add this entry to your host file if you want to have access to the VVV dashboard. It gives you an overview of all the available WordPress domains.
       ```
