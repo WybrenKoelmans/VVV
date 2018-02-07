@@ -5,6 +5,6 @@ cd /vagrant/www/wordpress-skydreams/htdocs/
 
 for url in $(wp site list --field=url)
 do
-    wp theme list --status=active --field=name --url=$url
+    echo "$(echo $url)" "$(echo " - ")" "$(wp theme list --status=active --field=name --url=$url)"
 done
 
