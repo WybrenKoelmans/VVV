@@ -65,3 +65,7 @@ sites:
       - window24.ie.dev.skydreams.com
       - getamover.ie.dev.skydreams.com
       - giardinieri-24.it.dev.skydreams.com
+
+utilities:
+  gulp-cli:
+      - gulp-cli

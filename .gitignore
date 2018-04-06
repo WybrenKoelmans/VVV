@@ -14,7 +14,7 @@
 /provision/provision-pre.sh
 /provision/provision-post.sh
 /provision/github.token
-/provision/resources/
+/provision/resources/core/
 /provision/phpcs/
 
 # Ignore custom trigger scripts in config/homebin.
