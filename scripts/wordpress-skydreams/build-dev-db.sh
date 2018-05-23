@@ -8,7 +8,7 @@ fi
 echo "Importing db..."
 gzip -dc /vagrant/wordpress-live.sql.gz | mysql --user=root --password=root wordpress-skydreams
 
-echo "Start db string replacement #2: replace wordpress.skydreams.com -> wordpress.skydreams.com.dev.skydreams.com"
+echo "Start db string replacement of network domain"
 php /vagrant/scripts/search-replace-db/srdb.cli.php -h localhost -u skydev -n wordpress-skydreams -p skydev -s wordpress.skydreams.com -r wordpress.skydreams.com.dev.skydreams.com -v false -t wp_blogs
 
 cd /vagrant/www/wordpress-skydreams/htdocs
@@ -55,4 +55,4 @@ wp core update-db --allow-root --network
 # Update disqus_form_url as we don't want to affect comments @ production
 wp site option update disqus_forum_url skydreams-test --allow-root
 
-mysqldump --user=root --password=root wordpress-skydreams | gzip > vagrant/wordpress-dev.sql.gz
+mysqldump --user=root --password=root wordpress-skydreams | gzip > /vagrant/wordpress-dev.sql.gz
