@@ -6,7 +6,7 @@ This repository contains the WordPress environment setup for 2 WordPress network
 
 # Getting started
 1. **Before running vagrant up**: Import Database, plugins and file uploads.   
-   * Copy the latest WordPress export files from Google Drive File Stream (G:\Team Drives\Team IT\WordPress export) to the root directory (vagrant-local) of this repository.
+   * Copy the latest WordPress export files from Google Drive File Stream (G:\Team Drives\Team IT\WordPress export) to the root directory (VVV) of this repository.
    These files contain all the plugins, file uploads and other data that are used on production.
 1. Install Wordpress Themes
    * Open a bash shell **on the host**, such as 'Git Bash' and run ./scripts/install-themes.sh from the repository root. This script will clone the required themes in the correct directories
