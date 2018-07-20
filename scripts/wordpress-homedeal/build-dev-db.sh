@@ -15,8 +15,12 @@ cd /vagrant/www/wordpress-homedeal/htdocs
 
 wp plugin deactivate redirection --network --allow-root
 
-echo 'Add skydev user'
-wp user create skydev test@skydreams.com --user_pass=skydev --role=administrator --allow-root
+if wp user get skydev --allow-root ; then
+    wp user update skydev --user_pass=skydev --role=administrator --allow-root ;
+else
+    wp user create skydev test@skydreams.com --user_pass=skydev --role=administrator --allow-root ;
+fi
+
 wp super-admin add test@skydreams.com --allow-root
 
 # Update site specific urls
