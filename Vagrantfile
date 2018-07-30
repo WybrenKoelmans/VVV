@@ -237,7 +237,11 @@ Vagrant.configure("2") do |config|
   # should be changed. If more than one VM is running through VirtualBox, including other
   # Vagrant machines, different subnets should be used for each.
   #
-  config.vm.network :private_network, id: "vvv_primary", ip: "192.168.50.4"
+  #
+  # Note: Default value changed from `192.168.50.4` to `192.168.55.4`
+  # to prevent issues with connection through VPN
+  #
+  config.vm.network :private_network, id: "vvv_primary", ip: "192.168.55.4"
 
   config.vm.provider :hyperv do |v, override|
     override.vm.network :private_network, id: "vvv_primary", ip: nil
