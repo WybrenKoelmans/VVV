@@ -4,10 +4,12 @@ cd /vagrant/www/wordpress-homedeal/htdocs
 
 wp core download --allow-root
 wp core config --dbname="wordpress-homedeal" --dbuser=skydev --dbpass=skydev --dbhost="localhost" --allow-root --extra-php <<PHP
+define('APP_ENV', 'development');
 define('WP_DEBUG', true );
 define('WP_DEBUG_LOG', true );
 define('PARTNER_URL', 'http://partners.skydreams.com.dev.skydreams.com');
 define('SKYAPI_URL', 'http://skyapi.net.dev.skydreams.com');
+define('SKYCDN_URL', 'http://resources.skycdn.net.dev.skydreams.com');
 define('ALLOW_UNFILTERED_UPLOADS', true );
 
 define('WP_ALLOW_MULTISITE', true );
