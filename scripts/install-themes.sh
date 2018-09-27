@@ -25,5 +25,10 @@ fi
 
 echo "Cloning latest WordPress HomeDeal Theme"
 if [ ! -d  www/wordpress-homedeal/htdocs/wp-content/themes/homedeal ]; then
-    git clone git@github.com:SkyDreams/wordpress-theme-homedeal.git www/wordpress-homedeal/htdocs/wp-content/themes/homedeal
+    git clone -b v2018.36.0 git@github.com:SkyDreams/wordpress-theme-homedeal.git www/wordpress-homedeal/htdocs/wp-content/themes/homedeal
+fi
+
+echo "Cloning latest WordPress HomeDeal 2018 Theme"
+if [ ! -d  www/wordpress-homedeal/htdocs/wp-content/themes/homedeal-2018 ]; then
+    git clone git@github.com:SkyDreams/wordpress-theme-homedeal.git www/wordpress-homedeal/htdocs/wp-content/themes/homedeal-2018
 fi
