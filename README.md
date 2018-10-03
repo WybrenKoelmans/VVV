@@ -13,7 +13,7 @@ This repository contains the WordPress environment setup for 2 WordPress network
 1. Configure VVV Dashboard (optional)
    * Add this entry to your host file if you want to have access to the VVV dashboard. It gives you an overview of all the available WordPress domains.
       ```
-      192.168.50.4  vvv.test
+      192.168.55.4  vvv.test
       ```
 1. Provisioning is run upon creation (`vagrant up`)
 
