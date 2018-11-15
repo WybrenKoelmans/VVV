@@ -19,6 +19,7 @@ sites:
     hosts:
       - homedeal.com.dev.skydreams.com
       - homedeal.nl.dev.skydreams.com
+      - homedeal.it.dev.skydreams.com
       - homedeal.be.dev.skydreams.com
 
   wordpress-skydreams:
