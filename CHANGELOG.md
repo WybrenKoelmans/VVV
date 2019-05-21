@@ -4,7 +4,155 @@ title: Changelog
 permalink: /docs/en-US/changelog/
 ---
 
-## TBD (TBD)
+## 3.0.0 ( May 2019 )
+
+This version moves to an Ubuntu 18.04 box. It also moves the database data directory to a mounted folder. This means you can destroy and rebuild the VM without loss, but it also means **a `vagrant destroy` is necessary to update**. **Be sure to back up database tables you need beforehand**.
+
+In the near future, we expect to use a box with PHP/etc preinstalled, this will be VVV 4.0.
+
+### Enhancements
+
+ - The box was changed to use Ubuntu 18.04 LTS
+ - If cloning a git repo to create a new site fails, VVV will halt provisioning and warn the user
+ - Added tbe `git-svn` package, `git-svn` is used for bi-directional operation between subversion and git
+ - MongoDB was updated to v4.0
+ - New `/srv/provision` and `/srv/certificates` shared folders
+
+### Bug Fixes
+
+ - Added a VVV package mirror PPA
+ - Updated apt-get keys for several sources
+ - Prevented provisioning from occurring inside Ubuntu 14 VMs
+ - Fixed issues with Nginx restarting too fast and too often
+ - Fixed the permissions on the `db_restore` script
+ - The `/var/log` folder is no longer directly mounted, instead the `/var/log/php`, `/var/log/nginx` and `/var/log/memcached` subfolders are mounted. This improves compatibility
+
+### Removals
+
+ - The deprecated domains `vvv.dev`, `vvv.local`, and `vvv.localhost`, were removed, the dashboard lives at `vvv.test`.
+ - Removed the `/vagrant` default shared folder
+
+## 2.6.0 ( 2nd April 2019 )
+
+### Enhancements
+
+ * Auto download plugin for vagrant, supported vagrant 2.2.0+
+ * Autoset the locale inside the virtual machine to avoid errors in the console
+ * Added a `vagrant_provision` and `vagrant_provision_custom` script to the homebin folder that run post-provision
+ * Improved the messaging to tell the user at the end of a `vagrant up` or `vagrant provision` that it was succesful
+ * Added friendly splashes at the end of vagrant up and provision to make it obvious to end users when they've finished
+ * The VVV install path is now in the splash screen, making it easier to debug GH issues
+ * Added a `wordcamp_contributor_day_box` flag to the `vm_config` section of `vvv-config.yml` so that contributor day setup scripts are simpler
+
+### Bug Fixes
+
+ * Improved detection of VirtualBox path to avoid `???` version numbers in the VVV splash
+
+## 2.5.1 ( 14th January 2019 )
+
+2.5 Brings a major bug fix, and some performance improvements to provisioning
+
+### Enhancements
+
+ * Updated PHPMemcachedadmin from v1.2.2.1 to v1.2.3
+ * A new `db_backup` option was added to `vvv-custom.yml`
+ * A new `db_restore` option was added to skip the initial import
+ * MailHog is now installed from a prebuilt binary instead of being built from source, speeding up initial provision
+ * VVV will now explicitly check for vvv-hosts in the .vvv and provision subfolders and skip searching 3 folders down if they're found
+ * Additional warnings and messages were added to aid with debugging site provisioners
+ * VVV will warn the user if no hosts are defined for a site, or if no folder exists for a site
+ * Skipping provisioning on a site will now make the site provisioner abort earlier
+ * Site provisioners no longer need to use nginx template config files to add TLS keys, they can use `{vvv_tls_cert}` and `{vvv_tls_key}` in `vvv-nginx.conf`
+ * `tideways.vvv.test` is now registered if the experimental tideways xhgui utility is present
+
+### Deprecations
+
+ * Loading vvv-hosts is now skipped if hosts are defined in the VVV configuration file
+ * GoLang was removed from the provisioner
+
+### Bug Fixes
+
+ * Updated the GPG key for packagecloud.io
+ * Updated the site provisioning script to fix WordPress Meta Environment failure (WordPress/meta-environment#122)
+ * Continue if the vagrant up and reload triggers failed
+ * Nginx and MySQL restarting is no longer done via a provisioner, this fixes contributor day issues when using `--no-provision` leading to nginx and mysql being unavailable. This is done via the `config/homebin/vagrant_up` script
+
+## 2.4.0 ( 2018 October 2th )
+
+### Enhancements
+
+ * Updated Node v6 to Node v10
+ * The default site config has been improved to clear up confusion over the difference between the site template and the develop site template
+ * Utilities can now place nginx config files in `/etc/nginx/custom-utilities/` during provisioning
+ * The default Nginx config can now be extended with files in `/etc/nginx/dashboard-extensions/` during provisioning
+ * The message VVV showed when copying `vvv-config.yml` to `vvv-custom.yml` was a tad confusing, it's been improved
+
+### Bug Fixes
+
+ * Sites that set `skip_provision` to true no longer have their hosts added
+ * PHP error logging was switched from `/srv/log` to `/var/log`, fixing an issue with PHP logs appearing inside Nginx logs
+
+## 2.3.0 ( 2018 September )
+
+### Enhancements
+
+ * Support for git-lfs
+ * Replaced MailCatcher with MailHog
+ * Network tests now use Launchpad instead of Google.com
+ * Improved Splash screen and warning messages
+ * Improved the default vvv config to prevent confusion
+ * Improved the default prompt when using `vagrant ssh`
+ * Improved the welcome message when you SSH in
+ * If provisioning fails, VVV now aborts instead of continuing and failing
+ * Apt-get keys are now bundled with the VM
+
+### Bug Fixes
+
+ * VVV will now warn you when you add a site without a site template
+ * Fixed issues wrapping bash prompt colours on some environments
+ * Fixed an issue with dpkg failures
+ * The logs folder is now owned by the vagrant user not the ubuntu user
+
+### Deprecations
+
+ - VVV will now search 3 folders down for vvv-init.sh vvv-hosts and vvv-nginx.conf not 4 folders
+ - Ruby was replaced with GoLang, and MailCatcher removed for new users
+
+## 2.2.1 (May, 2018)
+
+Note that to update to 2.2.1, you must remove the Vagrant triggers plugin and install Vagrant 2.1
+
+### Enhancements
+
+* Support for Vagrant 2.1, note that older versions of Vagrant and Vagrant Triggers are now deprecated
+* PHP 7.2 is now the default PHP version
+* Added the TLS CA authority, making HTTPS TLS/SSL connections to VVV sites easier, see [our docs on how to set this up](https://varyingvagrantvagrants.org/docs/en-US/references/https/)
+* The VVV terminal splash is now smaller, with better support for lighter colour schemes.
+* The dashboard is now a separate git repo cloned on provision, that can be overriden in `vvv-custom.yml`
+* PHPCompatibility PHPCS standards are now installed
+* VVV now has a `version` file
+* Private network IP can now be changed via `vvv-custom.yml`, see [#1407](https://github.com/Varying-Vagrant-Vagrants/VVV/pull/1407)
+* Default VM RAM bumped up to `2048` from `1024`, [see #1370](https://github.com/Varying-Vagrant-Vagrants/VVV/pull/1370)
+* The `src` subdomain of the WP develop site was disabled in line with changes to WP core
+* `php70` added to the core utility
+
+### Bug Fixes
+
+* Fixed the unexpected `-f` error on Windows
+* Fixed the splash not reporting git vs zip and branch on Windows
+* Fixes to PHPCS installation
+* Updated the box used for VMWare [see #1406](https://github.com/Varying-Vagrant-Vagrants/VVV/pull/1406)
+* When cloning utilities git ran as the root user [see #1491](https://github.com/Varying-Vagrant-Vagrants/VVV/pull/1491)
+* Composer ran under the root users [see #1489](https://github.com/Varying-Vagrant-Vagrants/VVV/pull/1489)
+* When cloning sites, git ran as the root user [see #1490](https://github.com/Varying-Vagrant-Vagrants/VVV/pull/1490)
+
+### Deprecations
+
+* `vvv-wordpress-develop` has been replaced by `custom-site-template-develop`
+* `vvv-wordpress` has been replaced by `custom-site-template`
+* Legacy TLS certificate generation for vvv.test was removed, it was broken, use the TLS-CA utility instead
+* PHP 7.0 is no longer the default PHP version used, and has been replaced with PHP 7.2, `php70` is available in the core utility [see #1484](https://github.com/Varying-Vagrant-Vagrants/VVV/pull/1484)
+* Older versions of Vagrant are no longer supported, Vagrant 2.1+ is now required
 
 ## 2.1.0 (November 8, 2017)
 
@@ -41,7 +189,7 @@ A full `vagrant destroy` and `vagrant up` are recommended for best results. Runn
 
 It is possible to make the from VVV 1.4.x to 2.0.0 without a `vagrant destroy`, but the process will involve restructuring several things. Primarily, default project directories are now expected to contain a `public_html/` directory. This requires not only file changes, but new Nginx configurations. If you need help troubleshooting, don't hesitate to open a new issue.
 
-Please see the [migration documentation](https://varyingvagrantvagrants.org/docs/en-US/migrate-vvv-1/) for tips on how to manage this process.
+Please see the [migration documentation](https://varyingvagrantvagrants.org/docs/en-US/adding-a-new-site/migrating-from-vvv-1-4-x/) for tips on how to manage this process.
 
 The decision to include breaking changes in a release is not made lightly. The new ability to configure your installation of VVV with a `vvv-custom.yml` file will make VVV entirely more flexible and maintainable than it has ever been. Please see the [release blog post](https://varyingvagrantvagrants.org/blog/2017/03/13/varying-vagrant-vagrants-2-0-0.html) and [documentation](https://varyingvagrantvagrants.org/docs/en-US/) for more details.
 

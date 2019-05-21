@@ -12,9 +12,10 @@
 # These are your websites, and their names map on to the folders they're
 # located in. See the docs for how to define these, and what all the keys
 # and options are
+vm_config:
+  private_network_ip: 192.168.55.4
+
 sites:
-  # The wordpress-default configuration provides a default installation of the
-  # latest version of WordPress.
   wordpress-homedeal:
     hosts:
       - homedeal.com.dev.skydreams.com

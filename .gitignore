@@ -14,7 +14,8 @@
 /provision/provision-pre.sh
 /provision/provision-post.sh
 /provision/github.token
-/provision/resources/core/
+/provision/resources/
+/provision/utilities/
 /provision/phpcs/
 
 # Ignore custom trigger scripts in config/homebin.
@@ -41,8 +42,12 @@
 # No need to share our mysql data with each other
 /database/data/*
 
+# No need to share our mysql data with each other
+/database/sql/imports/*
+
 # Log files should be ignored.
-/log/**/*.log
+/log/*
+!/log/README.md
 
 # No need to share our individual sites with each other
 /www/*
@@ -60,22 +65,9 @@
 # And we do have a default SQL file that should be included
 !/database/init.sql
 
-# Allow the dashboard
-!/www/default/dashboard/
-
 # And we provide our default host names in a dat file.
 !/www/vvv-hosts
 
-/www/*
-
-# And a few of our web directories are important to share.
-!/www/default/
-!/www/*/provision
-
-
 # But not the custom phpMyAdmin config in the database-admin directory.
 /www/default/database-admin/config.inc.custom.php
-/*tar.gz
-
-# It's best to keep this file for future reference
-!replace-weetjesv3.0-thank-you-page.sql
+/certificates
