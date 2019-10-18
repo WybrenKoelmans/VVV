@@ -23,6 +23,11 @@ if [ ! -d  www/wordpress-skydreams/public_html/wp-content/themes/wordpress-theme
     git clone -b 3.0 git@github.com:SkyDreams/wordpress-theme-weetjes.git www/wordpress-skydreams/public_html/wp-content/themes/wordpress-theme-weetjes-v3.0
 fi
 
+echo "Cloning latest WordPress Move Theme"
+if [ ! -d  www/wordpress-skydreams/public_html/wp-content/themes/move ]; then
+    git clone git@github.com:SkyDreams/wordpress-theme-move.git www/wordpress-skydreams/public_html/wp-content/themes/move
+fi
+
 echo "Cloning latest WordPress HomeDeal Theme"
 if [ ! -d  www/wordpress-homedeal/public_html/wp-content/themes/homedeal ]; then
     git clone -b v2018.36.0 git@github.com:SkyDreams/wordpress-theme-homedeal.git www/wordpress-homedeal/public_html/wp-content/themes/homedeal
